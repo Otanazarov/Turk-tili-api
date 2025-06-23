@@ -3,11 +3,11 @@ import { Reflector } from '@nestjs/core';
 import { JsonWebTokenError, verify } from 'jsonwebtoken';
 import { Observable } from 'rxjs';
 import { HttpError } from 'src/common/exception/http.error';
-import { Role } from './role.enum';
 import { ROLES_KEY } from './roles.decorator';
 import { env } from 'src/common/config';
 import { getTokenVersion } from '../token-version.store';
 import { getRefreshTokenVersion } from '../refresh-token-version.store';
+import { Role } from '@prisma/client';
 
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}

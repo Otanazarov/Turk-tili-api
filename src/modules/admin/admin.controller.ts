@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   Query,
   Req,
   ParseIntPipe,
@@ -15,9 +14,9 @@ import { FindAllAdminQueryDto } from './dto/findAll-admin.dto';
 import { LoginAdminDto } from './dto/login-admin.dto';
 import { RefreshAdminDto } from './dto/refresh-admin.dto';
 import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
-import { Role } from 'src/common/auth/roles/role.enum';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
+import { Role } from '@prisma/client';
 
 @Controller('admin')
 export class AdminController {
@@ -42,31 +41,30 @@ export class AdminController {
   }
 
   @Post('logout')
-  @DecoratorWrapper('Admin Logout', true, [Role.Admin])
+  @DecoratorWrapper('Admin Logout', true, [Role.ADMIN])
   logout(@Req() req: any) {
     return this.adminService.logout(req.user.id);
   }
 
   @Get()
-  @DecoratorWrapper('Get All Admins', true, [Role.Admin])
+  @DecoratorWrapper('Get All Admins', true, [Role.ADMIN])
   findAll(@Query() query: FindAllAdminQueryDto) {
     return this.adminService.findAll(query);
   }
 
   @Get(':id')
-  @DecoratorWrapper('Get Admin by ID', true, [Role.Admin])
-  findOne(@Param('id',ParseIntPipe) id: string) {
-    return this.adminService.findOne(+id);
+  @DecoratorWrapper('Get Admin by ID', true, [Role.ADMIN])
+  findOne(@Param('id', ParseIntPipe) id: string) {
+    return this.adminService.findOne(id);
   }
 
   @Patch(':id')
-  @DecoratorWrapper('Update Admin', true, [Role.Admin])
+  @DecoratorWrapper('Update Admin', true, [Role.ADMIN])
   update(
-    @Param('id',ParseIntPipe) id: string,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateAdminDto: UpdateAdminDto,
-    @Req() req: any,
   ) {
-    return this.adminService.update(+id, updateAdminDto, req.user.id);
+    return this.adminService.update(id, updateAdminDto);
   }
 
   // @Delete(':id')

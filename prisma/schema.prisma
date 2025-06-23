@@ -39,13 +39,15 @@ enum QuestionType {
 model User {
   id        String   @id @default(uuid())
   name      String
-  email     String   @unique
+  email     String?  @unique
   password  String
   avatarUrl String?
-  level     Level
+  level     Level    @default(BEGINNER)
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  refreshToken String?
 
   createdListeningTests ListeningTest[]       @relation("CreatedListeningTests")
   listeningSubmissions  ListeningSubmission[]
@@ -57,7 +59,7 @@ model User {
 }
 
 model Admin {
-  id           Int      @id @default(autoincrement())
+  id           String   @id @default(uuid())
   password     String
   name         String   @unique
   refreshToken String?
