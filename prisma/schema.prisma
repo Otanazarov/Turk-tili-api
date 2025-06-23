@@ -1,3 +1,9 @@
+// This is the Prisma schema generated based on your ER diagram.
+// Some naming and relational inconsistencies have been corrected.
+
+// --------------------------------------
+// Datasource & Generator
+// --------------------------------------
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -5,6 +11,49 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+}
+
+// --------------------------------------
+// Enums
+// --------------------------------------
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum QuestionType {
+  SHORT_TEXT
+  FILL_BLANK
+  MULTI_CHOICE
+}
+
+// --------------------------------------
+// Models
+// --------------------------------------
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  avatarUrl String?
+  level     Level
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdListeningTests ListeningTest[]       @relation("CreatedListeningTests")
+  listeningSubmissions  ListeningSubmission[]
+  createdReadingTests   ReadingTest[]         @relation("CreatedReadingTests")
+  readingSubmissions    ReadingSubmission[]
+
+  following Follows[] @relation("Following")
+  followers Follows[] @relation("Followers")
 }
 
 model Admin {
@@ -16,29 +65,157 @@ model Admin {
   updatedAt    DateTime @updatedAt
 }
 
-model Category {
-  id        Int      @id @default(autoincrement())
-  name      String
-  rooms     Room[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Room {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  price       Float
-  categoryId  Int
-  category    Category @relation(fields: [categoryId], references: [id])
-  images      Image[]
+model Follows {
+  id          String   @id @default(uuid())
+  followerId  String
+  followingId String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  follower  User @relation("Followers", fields: [followerId], references: [id])
+  following User @relation("Following", fields: [followingId], references: [id])
 }
 
-model Image {
-  id     Int    @id @default(autoincrement())
-  url    String
-  roomId Int
-  room   Room   @relation(fields: [roomId], references: [id])
+model ListeningTest {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  createdBy   User     @relation("CreatedListeningTests", fields: [createdById], references: [id])
+  createdById String
+  createdAt   DateTime @default(now())
+
+  sections    ListeningSection[]
+  submissions ListeningSubmission[]
+}
+
+model ListeningSection {
+  id       String        @id @default(uuid())
+  test     ListeningTest @relation(fields: [testId], references: [id])
+  testId   String
+  title    String
+  audioUrl String
+  order    Int
+
+  questions ListeningQuestion[]
+}
+
+model ListeningQuestion {
+  id             String           @id @default(uuid())
+  section        ListeningSection @relation(fields: [sectionId], references: [id])
+  sectionId      String
+  questionText   String
+  correctAnswers Json
+  order          Int
+  questionType   QuestionType
+
+  answers             ListeningAnswer[]
+  ListeningUserAnswer ListeningUserAnswer[]
+}
+
+model ListeningSubmission {
+  id          String        @id @default(uuid())
+  user        User          @relation(fields: [userId], references: [id])
+  userId      String
+  test        ListeningTest @relation(fields: [testId], references: [id])
+  testId      String
+  score       Int
+  startedAt   DateTime      @default(now())
+  completedAt DateTime?
+
+  answers ListeningAnswer[]
+}
+
+model ListeningAnswer {
+  id           String              @id @default(uuid())
+  submission   ListeningSubmission @relation(fields: [submissionId], references: [id])
+  submissionId String
+  question     ListeningQuestion   @relation(fields: [questionId], references: [id])
+  questionId   String
+  userAnswer   String
+  isCorrect    Boolean
+  aiFeedback   String?
+}
+
+model ListeningUserAnswer {
+  id           String            @id @default(uuid())
+  question     ListeningQuestion @relation(fields: [qestionId], references: [id])
+  qestionId    String
+  questionType QuestionType
+  isCorrect    Boolean
+}
+
+model ReadingTest {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  createdBy   User     @relation("CreatedReadingTests", fields: [createdById], references: [id])
+  createdById String
+  createdAt   DateTime @default(now())
+
+  passages    ReadingPassage[]
+  submissions ReadingSubmission[]
+}
+
+model ReadingPassage {
+  id      String      @id @default(uuid())
+  test    ReadingTest @relation(fields: [testId], references: [id])
+  testId  String
+  content String
+  order   Int
+
+  sections ReadingSection[]
+}
+
+model ReadingSection {
+  id          String         @id @default(uuid())
+  passage     ReadingPassage @relation(fields: [passageId], references: [id])
+  passageId   String
+  title       String
+  description String?
+
+  questions ReadingQuestion[]
+}
+
+model ReadingQuestion {
+  id             String         @id @default(uuid())
+  section        ReadingSection @relation(fields: [sectionId], references: [id])
+  sectionId      String
+  questionText   String
+  questionType   QuestionType
+  correctAnswers Json
+  order          Int
+
+  answers           ReadingAnswer[]
+  ReadingUserAnswer ReadingUserAnswer[]
+}
+
+model ReadingSubmission {
+  id          String      @id @default(uuid())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+  test        ReadingTest @relation(fields: [testId], references: [id])
+  testId      String
+  score       Int
+  startedAt   DateTime    @default(now())
+  completedAt DateTime?
+
+  answers ReadingAnswer[]
+}
+
+model ReadingAnswer {
+  id           String            @id @default(uuid())
+  submission   ReadingSubmission @relation(fields: [submissionId], references: [id])
+  submissionId String
+  question     ReadingQuestion   @relation(fields: [questionId], references: [id])
+  questionId   String
+  userAnswer   String
+  isCorrect    Boolean
+}
+
+model ReadingUserAnswer {
+  id           String          @id @default(uuid())
+  question     ReadingQuestion @relation(fields: [qestionId], references: [id])
+  qestionId    String
+  questionType QuestionType
+  isCorrect    Boolean
 }
