@@ -22,31 +22,34 @@ export class ListeningService {
         },
       },
       data: {
+        title: createListeningDto.title,
+        description: createListeningDto.description,
         passages: {
-          createMany: {
-            data: createListeningDto.passages.map((passage) => ({
-              ...passage,
-              sections: {
-                createMany: {
-                  data: passage.sections.map((section) => ({
-                    ...section,
-                    questions: {
-                      createMany: {
-                        data: section.questions.map((question) => ({
-                          ...question,
-                          answers: { createMany: { data: question.answers } },
-                        })),
-                      },
+          create: createListeningDto.passages.map((passage) => ({
+            title: passage.title,
+            order: passage.order,
+            sections: {
+              create: passage.sections.map((section) => ({
+                title: section.title,
+                audioUrl: section.audioUrl,
+                order: section.order,
+                questions: {
+                  create: section.questions.map((question) => ({
+                    questionText: question.questionText,
+                    order: question.order,
+                    questionType: question.questionType,
+                    answers: {
+                      create: question.answers.map((answer) => ({
+                        answerText: answer.answerText,
+                        isCorrect: answer.isCorrect,
+                      })),
                     },
                   })),
                 },
-              },
-            })),
-          },
+              })),
+            },
+          })),
         },
-
-        title: createListeningDto.title,
-        description: createListeningDto.description,
       },
     });
     return listening;
@@ -88,6 +91,15 @@ export class ListeningService {
   async findOne(id: string) {
     const listening = await this.prisma.listeningTest.findUnique({
       where: { id },
+      include: {
+        passages: {
+          include: {
+            sections: {
+              include: { questions: { include: { answers: true } } },
+            },
+          },
+        },
+      },
     });
     if (!listening) {
       throw HttpError({ code: 'Listening not found' });

@@ -28,13 +28,13 @@ export class ListeningController {
   }
 
   @Get()
-  @DecoratorWrapper('Get All Listenings', true, [Role.USER])
+  @DecoratorWrapper('Get All Listenings', true, [Role.USER, Role.ADMIN])
   findAll(@Query() query: FindAllListeningQueryDto) {
     return this.listeningService.findAll(query);
   }
 
   @Get(':id')
-  @DecoratorWrapper('Get Listening by ID', true, [Role.USER])
+  @DecoratorWrapper('Get Listening by ID', true, [Role.USER, Role.ADMIN])
   findOne(@Param('id') id: string) {
     return this.listeningService.findOne(id);
   }
