@@ -17,7 +17,8 @@ import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from '@prisma/client';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags("User")
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -47,7 +48,7 @@ export class UserController {
   }
 
   @Get()
-  @DecoratorWrapper('Get All Users', true, [Role.USER])
+  @DecoratorWrapper('Get All Users')
   findAll(@Query() query: FindAllUserQueryDto) {
     return this.userService.findAll(query);
   }

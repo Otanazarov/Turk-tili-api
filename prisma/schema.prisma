@@ -73,6 +73,8 @@ model Follows {
 
   follower  User @relation("Followers", fields: [followerId], references: [id])
   following User @relation("Following", fields: [followingId], references: [id])
+
+   @@unique([followerId, followingId])
 }
 
 model ListeningTest {

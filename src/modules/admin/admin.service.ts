@@ -28,7 +28,7 @@ export class AdminService {
       where: { name: createAdminDto.name },
     });
     if (existingAdmin) {
-      throw HttpError({ code: 'Admin with this name already exists' });
+      throw HttpError({ message: 'Admin with this name already exists' });
     }
     const hashedPassword = await bcrypt.hash(createAdminDto.password, 10);
     createAdminDto.password = hashedPassword;
@@ -40,6 +40,8 @@ export class AdminService {
 
   async login(dto: LoginAdminDto) {
     const { name, password } = dto;
+    console.log(name,password);
+    
     const admin = await this.prisma.admin.findFirst({
       where: { name: name },
     });
@@ -139,7 +141,7 @@ export class AdminService {
   }
 
   async logout(id: string) {
-    const admin = await this.prisma.admin.findUnique({ where: { id } });
+    const admin = await this.prisma.admin.findUnique({ where: { id:id } });
     if (!admin) {
       throw HttpError({ code: 'Admin not found' });
     }
