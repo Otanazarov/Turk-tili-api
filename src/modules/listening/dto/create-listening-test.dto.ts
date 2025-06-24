@@ -67,6 +67,23 @@ export class CreateListeningSectionDto {
   questions: CreateListeningQuestionDto[];
 }
 
+export class CreateListeningPassageDto {
+  @ApiProperty({ example: 'string' })
+  @IsNotEmpty()
+  @IsString()
+  title: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  order: number;
+
+  @ApiProperty({ type: [CreateListeningSectionDto] })
+  @Type(() => CreateListeningSectionDto)
+  @ValidateNested()
+  sections: CreateListeningSectionDto[];
+}
+
 export class CreateListeningTestDto {
   @IsName()
   title: string;
@@ -76,8 +93,8 @@ export class CreateListeningTestDto {
   @IsString()
   description: string;
 
-  @ApiProperty({ type: [CreateListeningSectionDto] })
-  @Type(() => CreateListeningSectionDto)
+  @ApiProperty({ type: [CreateListeningPassageDto] })
+  @Type(() => CreateListeningPassageDto)
   @ValidateNested()
-  sections: CreateListeningSectionDto[];
+  passages: CreateListeningPassageDto[];
 }

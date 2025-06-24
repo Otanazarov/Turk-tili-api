@@ -13,24 +13,38 @@ export class ListeningService {
   async create(createListeningDto: CreateListeningTestDto) {
     const listening = await this.prisma.listeningTest.create({
       include: {
-        sections: { include: { questions: { include: { answers: true } } } },
+        passages: {
+          include: {
+            sections: {
+              include: { questions: { include: { answers: true } } },
+            },
+          },
+        },
       },
       data: {
-        sections: {
+        passages: {
           createMany: {
-            data: createListeningDto.sections.map((section) => ({
-              ...section,
-              questions: {
+            data: createListeningDto.passages.map((passage) => ({
+              ...passage,
+              sections: {
                 createMany: {
-                  data: section.questions.map((question) => ({
-                    ...question,
-                    answers: { createMany: { data: question.answers } },
+                  data: passage.sections.map((section) => ({
+                    ...section,
+                    questions: {
+                      createMany: {
+                        data: section.questions.map((question) => ({
+                          ...question,
+                          answers: { createMany: { data: question.answers } },
+                        })),
+                      },
+                    },
                   })),
                 },
               },
             })),
           },
         },
+
         title: createListeningDto.title,
         description: createListeningDto.description,
       },

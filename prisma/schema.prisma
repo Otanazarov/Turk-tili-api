@@ -37,19 +37,19 @@ enum QuestionType {
 // Models
 // --------------------------------------
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String?  @unique
-  password  String
-  avatarUrl String?
-  level     Level    @default(BEGINNER)
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(uuid())
+  name         String
+  email        String?  @unique
+  password     String
+  avatarUrl    String?
+  level        Level    @default(BEGINNER)
+  role         Role     @default(USER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   refreshToken String?
-  
-  listeningSubmissions  ListeningSubmission[]
-  readingSubmissions    ReadingSubmission[]
+
+  listeningSubmissions ListeningSubmission[]
+  readingSubmissions   ReadingSubmission[]
 
   following Follows[] @relation("Following")
   followers Follows[] @relation("Followers")
@@ -74,7 +74,7 @@ model Follows {
   follower  User @relation("Followers", fields: [followerId], references: [id])
   following User @relation("Following", fields: [followingId], references: [id])
 
-   @@unique([followerId, followingId])
+  @@unique([followerId, followingId])
 }
 
 model ListeningTest {
@@ -83,14 +83,25 @@ model ListeningTest {
   description String?
   createdAt   DateTime @default(now())
 
-  sections    ListeningSection[]
+  passages    ListeningPassage[]
   submissions ListeningSubmission[]
 }
 
+model ListeningPassage {
+  id     String        @id @default(uuid())
+  test   ListeningTest @relation(fields: [testId], references: [id])
+  testId String
+  title  String
+  order  Int
+
+  sections ListeningSection[]
+}
+
 model ListeningSection {
-  id       String        @id @default(uuid())
-  test     ListeningTest @relation(fields: [testId], references: [id])
-  testId   String
+  id        String           @id @default(uuid())
+  passage   ListeningPassage @relation(fields: [passageId], references: [id])
+  passageId String
+
   title    String
   audioUrl String
   order    Int
