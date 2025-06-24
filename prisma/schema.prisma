@@ -46,12 +46,9 @@ model User {
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   refreshToken String?
-
-  createdListeningTests ListeningTest[]       @relation("CreatedListeningTests")
+  
   listeningSubmissions  ListeningSubmission[]
-  createdReadingTests   ReadingTest[]         @relation("CreatedReadingTests")
   readingSubmissions    ReadingSubmission[]
 
   following Follows[] @relation("Following")
@@ -82,8 +79,6 @@ model ListeningTest {
   id          String   @id @default(uuid())
   title       String
   description String?
-  createdBy   User     @relation("CreatedListeningTests", fields: [createdById], references: [id])
-  createdById String
   createdAt   DateTime @default(now())
 
   sections    ListeningSection[]
@@ -102,13 +97,12 @@ model ListeningSection {
 }
 
 model ListeningQuestion {
-  id             String           @id @default(uuid())
-  section        ListeningSection @relation(fields: [sectionId], references: [id])
-  sectionId      String
-  questionText   String
-  correctAnswers Json
-  order          Int
-  questionType   QuestionType
+  id           String           @id @default(uuid())
+  section      ListeningSection @relation(fields: [sectionId], references: [id])
+  sectionId    String
+  questionText String
+  order        Int
+  questionType QuestionType
 
   answers             ListeningAnswer[]
   ListeningUserAnswer ListeningUserAnswer[]
@@ -128,30 +122,30 @@ model ListeningSubmission {
 }
 
 model ListeningAnswer {
-  id           String              @id @default(uuid())
-  submission   ListeningSubmission @relation(fields: [submissionId], references: [id])
-  submissionId String
-  question     ListeningQuestion   @relation(fields: [questionId], references: [id])
-  questionId   String
-  userAnswer   String
-  isCorrect    Boolean
-  aiFeedback   String?
+  id                  String                @id @default(uuid())
+  submission          ListeningSubmission   @relation(fields: [submissionId], references: [id])
+  submissionId        String
+  question            ListeningQuestion     @relation(fields: [questionId], references: [id])
+  questionId          String
+  answerText          String
+  isCorrect           Boolean
+  ListeningUserAnswer ListeningUserAnswer[]
 }
 
 model ListeningUserAnswer {
-  id           String            @id @default(uuid())
-  question     ListeningQuestion @relation(fields: [qestionId], references: [id])
-  qestionId    String
-  questionType QuestionType
-  isCorrect    Boolean
+  id                String            @id @default(uuid())
+  question          ListeningQuestion @relation(fields: [questionId], references: [id])
+  questionId        String
+  answer            ListeningAnswer   @relation(fields: [listeningAnswerId], references: [id])
+  answerId          String
+  isCorrect         Boolean
+  listeningAnswerId String
 }
 
 model ReadingTest {
   id          String   @id @default(uuid())
   title       String
   description String?
-  createdBy   User     @relation("CreatedReadingTests", fields: [createdById], references: [id])
-  createdById String
   createdAt   DateTime @default(now())
 
   passages    ReadingPassage[]
