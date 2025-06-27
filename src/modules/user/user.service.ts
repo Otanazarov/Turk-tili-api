@@ -23,17 +23,25 @@ import { Role } from '@prisma/client';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async register(createUserDto: RegisterUserDto) {
+  async register(registerUserDto: RegisterUserDto) {
     const existingUser = await this.prisma.user.findFirst({
-      where: { name: createUserDto.name },
+      where: { name: registerUserDto.name },
     });
     if (existingUser) {
       throw HttpError({ code: 'User with this name already exists' });
     }
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-    createUserDto.password = hashedPassword;
+    const existingEmail = await this.prisma.user.findUnique({
+      where: { email: registerUserDto.email },
+    });
+    if (existingEmail) {
+      throw HttpError({ message: 'Email already exists' });
+    }
+    const hashedPassword = await bcrypt.hash(registerUserDto.password, 10);
+    registerUserDto.password = hashedPassword;
 
-    const user = await this.prisma.user.create({ data: { ...createUserDto } });
+    const user = await this.prisma.user.create({
+      data: { ...registerUserDto },
+    });
     delete user.password;
     return user;
   }

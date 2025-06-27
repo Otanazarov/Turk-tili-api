@@ -175,7 +175,6 @@ export class AdminService {
           id: true,
           name: true,
           createdAt: true,
-          updatedAt: true,
         },
       }),
       this.prisma.admin.count({
@@ -203,7 +202,6 @@ export class AdminService {
         id: true,
         name: true,
         createdAt: true,
-        updatedAt: true,
       },
     });
     if (!admin) {
@@ -237,7 +235,6 @@ export class AdminService {
         id: true,
         name: true,
         createdAt: true,
-        updatedAt: true,
       },
     });
 

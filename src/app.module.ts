@@ -3,7 +3,8 @@ import { AdminModule } from './modules/admin/admin.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { FollowsModule } from './modules/follows/follows.module';
 import { UserModule } from './modules/user/user.module';
-import { ListeningModule } from './modules/listening/listening.module';
+import { TestModule } from './modules/test/test.module';
+import { IeltsModule } from './modules/ielts/ielts.module';
 
 @Module({
   controllers: [],
@@ -13,7 +14,8 @@ import { ListeningModule } from './modules/listening/listening.module';
     PrismaModule,
     FollowsModule,
     UserModule,
-    ListeningModule,
+    TestModule,
+    IeltsModule,
   ],
 })
 export class AppModule {}
