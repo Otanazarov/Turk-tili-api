@@ -14,13 +14,14 @@ import { UpdateIeltDto } from './dto/update-ielt.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { FindAllIeltsDto } from './dto/findAll-ielts.dto';
+import { Role } from '@prisma/client';
 @ApiTags('IELTS')
 @Controller('ielts')
 export class IeltsController {
   constructor(private readonly ieltsService: IeltsService) {}
 
   @Post()
-  @DecoratorWrapper('createIelts')
+  @DecoratorWrapper('createIelts', true, [Role.ADMIN])
   create(@Body() createIeltsDto: CreateIeltsDto) {
     return this.ieltsService.create(createIeltsDto);
   }
@@ -38,13 +39,13 @@ export class IeltsController {
   }
 
   @Patch(':id')
-  @DecoratorWrapper('updateIelts')
+  @DecoratorWrapper('updateIelts', true, [Role.ADMIN])
   update(@Param('id') id: string, @Body() updateIeltDto: UpdateIeltDto) {
     return this.ieltsService.update(id, updateIeltDto);
   }
 
   @Delete(':id')
-  @DecoratorWrapper('removeIelts')
+  @DecoratorWrapper('removeIelts', true, [Role.ADMIN])
   remove(@Param('id') id: string) {
     return this.ieltsService.remove(id);
   }
