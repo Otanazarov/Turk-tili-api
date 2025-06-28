@@ -8,11 +8,17 @@ import { HttpExceptionFilter } from './common/filter/httpException.filter';
 import { getValidationErrors } from './common/utils/nestedError';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: { origin: '*' } });
+  const app = await NestFactory.create(AppModule, {
+    cors: {
+      origin: 'http://localhost:5173',
+      credentials: true,
+    },
+  });
 
   app.setGlobalPrefix('/api');
 
   app.useGlobalFilters(new HttpExceptionFilter());
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -25,12 +31,13 @@ async function bootstrap() {
     }),
   );
 
-  if (env.ENV == 'dev') {
+  if (env.ENV === 'dev') {
     const ApiDocs = SwaggerModule.createDocument(app, ApiSwaggerOptions);
     SwaggerModule.setup('docs', app, ApiDocs, {
       customCssUrl: './public/swagger.css',
     });
   }
+
   await app.listen(env.PORT || 3000);
 }
 bootstrap();
