@@ -1,74 +1,121 @@
-// create-test.dto.ts
-import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { TestType, QuestionType } from '@prisma/client';
 
-class AnswerDto {
-  @ApiProperty({ example: 'Answer text' })
+export class AnswerDto {
+  @ApiPropertyOptional({
+    example: 'A',
+    required: false,
+    description:
+      'Answer variant (e.g., A, B, C). Only needed for multiple choice',
+  })
+  @IsString()
+  @IsOptional()
+  variant?: string;
+
+  @ApiPropertyOptional({
+    example: 'A',
+    description: 'Answer text or value',
+  })
   @IsString()
   @IsNotEmpty()
   answer: string;
 
-  @ApiProperty({ example: true })
-  @IsNotEmpty()
+  @ApiProperty({ example: true, description: 'Is this the correct answer?' })
+  @IsBoolean()
   correct: boolean;
 }
 
-class QuestionDto {
-  @ApiProperty({ example: 1 })
+export class QuestionDto {
+  @ApiProperty({ example: 1, description: 'Question number in the section' })
   @IsNumber()
   number: number;
 
-  @ApiProperty({ 
+  @ApiProperty({
     enum: QuestionType,
     example: QuestionType.MULTIPLE_CHOICE,
-    description: 'Type of question'
+    description: 'Type of the question',
   })
   @IsEnum(QuestionType)
   type: QuestionType;
 
-  @ApiProperty({ example: 'Question text' })
+  @ApiProperty({
+    example: 'What do trees produce?',
+    description: 'Question text',
+  })
   @IsString()
-  @IsNotEmpty()
-  text: string;
+  @IsOptional()
+  text?: string;
 
-  @ApiProperty({ type: [AnswerDto] })
+  @ApiProperty({
+    type: [AnswerDto],
+    description: 'Answer options for the question',
+  })
   @ValidateNested({ each: true })
   @Type(() => AnswerDto)
   @IsArray()
   answers: AnswerDto[];
 }
 
-class SectionDto {
-  @ApiProperty({ example: 'Section title' })
+export class SectionDto {
+  @ApiProperty({ example: 'Part 1 Section', required: false })
   @IsString()
   @IsOptional()
   title?: string;
 
-  @ApiProperty({ example: 'Section content/passage' })
+  @ApiProperty({ example: 'Read the following passage...', required: false })
   @IsString()
   @IsOptional()
   content?: string;
 
-  @ApiProperty({ type: [QuestionDto] })
+  @ApiProperty({ example: 'photo.jpg', required: false })
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
+
+  @ApiProperty({
+    type: [QuestionDto],
+    description: 'Questions within the section',
+  })
   @ValidateNested({ each: true })
   @Type(() => QuestionDto)
   @IsArray()
   questions: QuestionDto[];
 }
 
-class PartDto {
-  @ApiProperty({ example: 1 })
+export class PartDto {
+  @ApiProperty({
+    example: 1,
+    description: 'Part number (e.g., Part 1, Part 2)',
+  })
   @IsNumber()
   number: number;
 
-  @ApiProperty({ example: 'Audio URL', required: false })
-  @IsString()
+  @ApiProperty({ example: 'https://audio-url.mp3', required: false })
   @IsOptional()
+  @IsString()
   audioUrl?: string;
 
-  @ApiProperty({ type: [SectionDto] })
+  @ApiPropertyOptional({ example: 'Part 1 description', required: false })
+  @IsOptional()
+  @IsString()
+  title?: string;
+
+  @ApiProperty({
+    type: [SectionDto],
+    description: 'Sections inside the part',
+  })
   @ValidateNested({ each: true })
   @Type(() => SectionDto)
   @IsArray()
@@ -76,7 +123,7 @@ class PartDto {
 }
 
 export class CreateTestDto {
-  @ApiProperty({ example: 'Test 1' })
+  @ApiProperty({ example: 'Test 1', description: 'Title of the test' })
   @IsString()
   @IsNotEmpty()
   title: string;
@@ -84,17 +131,24 @@ export class CreateTestDto {
   @ApiProperty({
     enum: TestType,
     example: TestType.LISTENING,
-    description: 'Type of test (LISTENING or READING)'
+    description: 'Test type: LISTENING or READING',
   })
   @IsEnum(TestType)
   type: TestType;
 
-  @ApiProperty({ example: 'ielts-uuid' })
+  @ApiProperty({
+    example: 'd1a22aeb-9b4c-4b49-a913-456eef781111',
+    description: 'IELTS test group ID',
+  })
+  @IsUUID()
   @IsString()
   @IsNotEmpty()
   ieltsId: string;
 
-  @ApiProperty({ type: [PartDto] })
+  @ApiProperty({
+    type: [PartDto],
+    description: 'List of parts in the test',
+  })
   @ValidateNested({ each: true })
   @Type(() => PartDto)
   @IsArray()

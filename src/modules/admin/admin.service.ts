@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpError } from 'src/common/exception/http.error';
@@ -20,8 +20,14 @@ import { UpdateAdminDto } from './dto/update-admin.dto';
 import { Role } from '@prisma/client';
 
 @Injectable()
-export class AdminService {
+export class AdminService implements OnModuleInit {
   constructor(private readonly prisma: PrismaService) {}
+  async onModuleInit() {
+    const admin = await this.prisma.admin.count()
+    if (admin == 0) {
+      await this.create({ name: 'admin', password: 'admin' });
+    }
+  }
 
   async create(createAdminDto: CreateAdminDto) {
     const existingAdmin = await this.prisma.admin.findFirst({
@@ -40,8 +46,8 @@ export class AdminService {
 
   async login(dto: LoginAdminDto) {
     const { name, password } = dto;
-    console.log(name,password);
-    
+    console.log(name, password);
+
     const admin = await this.prisma.admin.findFirst({
       where: { name: name },
     });
@@ -141,7 +147,7 @@ export class AdminService {
   }
 
   async logout(id: string) {
-    const admin = await this.prisma.admin.findUnique({ where: { id:id } });
+    const admin = await this.prisma.admin.findUnique({ where: { id: id } });
     if (!admin) {
       throw HttpError({ code: 'Admin not found' });
     }

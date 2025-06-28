@@ -5,6 +5,7 @@ import { env } from './common/config';
 import { SwaggerModule } from '@nestjs/swagger';
 import { ApiSwaggerOptions } from './common/swagger/config.swagger';
 import { HttpExceptionFilter } from './common/filter/httpException.filter';
+import { getValidationErrors } from './common/utils/nestedError';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: { origin: '*' } });
@@ -15,11 +16,10 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: false,
       exceptionFactory: (errors) => {
-        const messages = errors.map((err) => {
-          const constraints = Object.values(err.constraints || {});
-          return `${err.property}: ${constraints.join(', ')}`;
-        });
+        const messages = getValidationErrors(errors);
         return new BadRequestException(messages.join(' | '));
       },
     }),

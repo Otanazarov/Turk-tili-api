@@ -71,6 +71,7 @@ model Ielts {
   title     String
   tests     Test[]
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Test {
@@ -79,6 +80,7 @@ model Test {
   type        TestType
   description String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   parts     Part[]
   createdBy Admin?       @relation(fields: [adminId], references: [id])
@@ -97,7 +99,9 @@ model Part {
   description String?
   audioUrl    String? // Listening uchun
 
-  sections Section[]
+  sections  Section[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Section {
@@ -107,8 +111,11 @@ model Section {
   title      String?
   content    String?
   hasBullets Boolean @default(false)
+  imageUrl   String? 
 
   questions Question[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model Question {
@@ -125,14 +132,19 @@ model Question {
 
   answers     Answer[]
   userAnswers UserAnswer[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
 model Answer {
-  id         String   @id @default(uuid())
-  question   Question @relation(fields: [questionId], references: [id])
-  questionId String
-  answer     String? // "A" yoki "A,C" formatida
-  correct    Boolean
+  id          String   @id @default(uuid())
+  question    Question @relation(fields: [questionId], references: [id])
+  questionId  String
+  variant     String? // "A", "B", "C" — only for choice-type questions
+  answer      String? // "A" yoki "A,C" formatida
+  correct     Boolean
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([questionId])
 }
@@ -148,20 +160,22 @@ model TestResult {
   completedAt DateTime?
 
   userAnswers UserAnswer[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   @@index([userId, testId])
 }
 
 model UserAnswer {
-  id         String     @id @default(uuid())
-  result     TestResult @relation(fields: [resultId], references: [id])
-  resultId   String
-  question   Question   @relation(fields: [questionId], references: [id])
+  id         String      @id @default(uuid())
+  result     TestResult? @relation(fields: [resultId], references: [id]) // <-- "?" qo‘shildi
+  resultId   String?
+  question   Question    @relation(fields: [questionId], references: [id])
   questionId String
   userAnswer String
   isCorrect  Boolean
-  timeSpent  Int // soniyada
-  answeredAt DateTime   @default(now())
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 
   @@index([resultId, questionId])
 }
@@ -173,6 +187,7 @@ model Follows {
   following   User     @relation(name: "Following", fields: [followingId], references: [id])
   followingId String
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@unique([followerId, followingId])
 }
