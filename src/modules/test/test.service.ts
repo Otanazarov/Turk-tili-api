@@ -44,7 +44,7 @@ export class TestService {
                       create: q.answers.map((a) => ({
                         answer: a.answer,
                         correct: a.correct,
-                        variant: a.variant || null,
+                        variantText: a.variantText || null,
                       })),
                     },
                   })),
@@ -78,9 +78,11 @@ export class TestService {
       where: { id: dto.answers[0].questionId },
       include: { section: { include: { part: true } } },
     });
+    console.log('First Question:', firstQuestion);
+    
 
     if (!firstQuestion) {
-      throw new HttpError({ message: 'Birinchi savol topilmadi' });
+      throw new HttpError({ message: 'questions not found' });
     }
 
     const testId = firstQuestion.section.part.testId;

@@ -16,8 +16,8 @@ export class SubmitAnswerDto {
 
   @ApiProperty({
     oneOf: [
-      { type: 'string', example: 'A' },
-      { type: 'array', items: { type: 'string' }, example: ['A', 'C'] },
+      { type: 'string', example: 'Apple' },
+      { type: 'array', items: { type: 'string' }, example: ['Apple', 'Cherry'] },
     ],
   })
   @IsDefined()

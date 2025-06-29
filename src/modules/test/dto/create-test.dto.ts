@@ -15,17 +15,16 @@ import { TestType, QuestionType } from '@prisma/client';
 
 export class AnswerDto {
   @ApiPropertyOptional({
-    example: 'A',
+    example: 'follow me',
     required: false,
-    description:
-      'Answer variant (e.g., A, B, C). Only needed for multiple choice',
+    description: 'Answer variant text',
   })
   @IsString()
   @IsOptional()
-  variant?: string;
+  variantText?: string;
 
   @ApiPropertyOptional({
-    example: 'A',
+    example: 'A or apple',
     description: 'Answer text or value',
   })
   @IsString()

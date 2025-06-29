@@ -111,7 +111,7 @@ model Section {
   title      String?
   content    String?
   hasBullets Boolean @default(false)
-  imageUrl   String? 
+  imageUrl   String?
 
   questions Question[]
   createdAt DateTime   @default(now())
@@ -140,7 +140,7 @@ model Answer {
   id          String   @id @default(uuid())
   question    Question @relation(fields: [questionId], references: [id])
   questionId  String
-  variant     String? // "A", "B", "C" — only for choice-type questions
+  variantText String?
   answer      String? // "A" yoki "A,C" formatida
   correct     Boolean
   createdAt   DateTime @default(now())
