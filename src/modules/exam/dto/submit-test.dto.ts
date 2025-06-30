@@ -17,7 +17,11 @@ export class SubmitAnswerDto {
   @ApiProperty({
     oneOf: [
       { type: 'string', example: 'Apple' },
-      { type: 'array', items: { type: 'string' }, example: ['Apple', 'Cherry'] },
+      {
+        type: 'array',
+        items: { type: 'string' },
+        example: ['Apple', 'Cherry'],
+      },
     ],
   })
   @IsDefined()
@@ -25,6 +29,10 @@ export class SubmitAnswerDto {
 }
 
 export class SubmitAnswersDto {
+  @ApiProperty()
+  @IsUUID()
+  testId?: string;
+
   @ApiProperty({ type: [SubmitAnswerDto] })
   @IsArray()
   @ValidateNested({ each: true })

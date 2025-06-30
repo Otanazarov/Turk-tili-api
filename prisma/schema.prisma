@@ -124,11 +124,7 @@ model Question {
   sectionId  String
   number     Int
   text       String?
-  prefixText String?
-  suffixText String?
   type       QuestionType
-  wordLimit  Int?
-  options    Json? // {option: "A", text: "..."} formatida
 
   answers     Answer[]
   userAnswers UserAnswer[]
@@ -157,7 +153,7 @@ model TestResult {
   testId      String
   score       Float
   startedAt   DateTime  @default(now())
-  completedAt DateTime?
+  completedAt DateTime? 
 
   userAnswers UserAnswer[]
   createdAt   DateTime     @default(now())

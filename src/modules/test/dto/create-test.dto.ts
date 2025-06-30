@@ -123,9 +123,18 @@ export class PartDto {
 
 export class CreateTestDto {
   @ApiProperty({ example: 'Test 1', description: 'Title of the test' })
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title?: string;
+
+  @ApiProperty({
+    example: 'Listening Test',
+    description: 'Description of the test',
+  })
+  @IsString()
+  @IsOptional()
+  description?: string;
 
   @ApiProperty({
     enum: TestType,
