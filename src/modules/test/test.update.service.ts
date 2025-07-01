@@ -17,6 +17,12 @@ export class TestUpdateService {
     if (!test) {
       throw HttpError({ message: 'Test not found' });
     }
+    const ieltsId = await this.prisma.ielts.findFirst({
+      where: { id: dto.ieltsId },
+    });
+    if (!ieltsId) {
+      throw HttpError({ message: 'IELTS ID not found' });
+    }
     return this.prisma.test.update({
       where: { id },
       data: dto,
