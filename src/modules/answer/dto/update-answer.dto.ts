@@ -2,11 +2,6 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class UpdateAnswerDto {
-  @ApiPropertyOptional({ example: 'A', description: 'Variant label (optional)' })
-  @IsOptional()
-  @IsString()
-  variant?: string;
-
   @ApiPropertyOptional({ example: 'Follow me', description: 'Answer text' })
   @IsOptional()
   @IsString()

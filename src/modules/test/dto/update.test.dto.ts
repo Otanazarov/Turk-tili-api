@@ -1,42 +1,36 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { TestType } from '@prisma/client';
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { TestType } from '@prisma/client'; // yoki enums fayling bo‘lsa, o‘shandan import qil
 
-export class CreateTestDto {
+export class UpdateTestDto {
   @ApiPropertyOptional({ example: 'Test 1', description: 'Title of the test' })
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
   title?: string;
 
   @ApiPropertyOptional({
     example: 'Listening Test',
     description: 'Description of the test',
   })
-  @IsString()
   @IsOptional()
+  @IsString()
   description?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: TestType,
     example: TestType.LISTENING,
     description: 'Test type: LISTENING or READING',
   })
+  @IsOptional()
   @IsEnum(TestType)
-  type: TestType;
+  type?: TestType;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'd1a22aeb-9b4c-4b49-a913-456eef781111',
     description: 'IELTS test group ID',
   })
+  @IsOptional()
   @IsUUID()
   @IsString()
-  @IsNotEmpty()
-  ieltsId: string;
+  ieltsId?: string;
 }

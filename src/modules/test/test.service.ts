@@ -1,14 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTestDto } from './dto/create-test.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindAllTestDto } from './dto/findAll-test.dto';
 import { HttpError } from 'src/common/exception/http.error';
+import { CreateAllTestDto } from './dto/create-AllTest.dto';
+import { CreateTestDto } from './dto/create-test.dto';
+import { UpdateTestDto } from './dto/update.test.dto';
 
 @Injectable()
 export class TestService {
   constructor(private readonly prisma: PrismaService) {}
-  async createTestWithParts(dto: CreateTestDto) {
-    const ielts = await this.prisma.ielts.findUnique({    
+  async createTestWithAddition(dto: CreateAllTestDto) {
+    const ielts = await this.prisma.ielts.findUnique({
       where: { id: dto.ieltsId },
     });
     if (!ielts) {
@@ -68,53 +70,61 @@ export class TestService {
       },
     });
   }
-  
-  // async findOneTestResult(userId: string, testId: string) {
-  //   const testResult = await this.prisma.testResult.findFirst({
-  //     where: {
-  //       userId,
-  //       testId,
-  //     },
-  //     include: {
-  //       userAnswers: {
-  //         include: {
-  //           question: {
-  //             include: {
-  //               answers: true, // to‘g‘ri javoblarni olish uchun
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   });
 
-  //   if (!testResult) {
-  //     throw new HttpError({ message: 'Natija topilmadi' });
-  //   }
+  async createTest(dto: CreateTestDto) {
+    const ielts = await this.prisma.ielts.findUnique({
+      where: { id: dto.ieltsId },
+    });
+    if (!ielts) {
+      throw HttpError({ message: 'IELTS not found' });
+    }
+    return this.prisma.test.create({
+      data: {
+        title: dto.title || null,
+        type: dto.type,
+        description: dto.description || null,
+        ieltsId: dto.ieltsId,
+      },
+    });
+  }
 
-  //   // Javoblarni formatlab beramiz
-  //   // const details = testResult.userAnswers.map((ua) => {
-  //   //   const correctAnswers = ua.question.answers
-  //   //     .filter((a) => a.correct)
-  //   //     .map((a) => a.answer?.trim());
+  async findOneTestWithAddition(id: string) {
+    const test = await this.prisma.test.findUnique({
+      where: { id },
+    });
+    if (!test) {
+      throw HttpError({ message: 'Test not found' });
+    }
+    return this.prisma.test.findUnique({
+      where: { id },
+      include: {
+        parts: {
+          include: {
+            sections: {
+              include: {
+                questions: {
+                  include: {
+                    answers: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
 
-  //   //   return {
-  //   //     questionId: ua.questionId,
-  //   //     questionText: ua.question.text,
-  //   //     userAnswer: ua.userAnswer,
-  //   //     correctAnswers,
-  //   //     isCorrect: ua.isCorrect,
-  //   //   };
-  //   // });
+  async findOneOnlyTest(id: string) {
+    const test = await this.prisma.test.findUnique({
+      where: { id },
+    });
 
-  //   // return {
-  //   //   score: testResult.score,
-  //   //   completedAt: testResult.completedAt,
-  //   //   totalQuestions: testResult.userAnswers.length,
-  //   //   correctCount: details.filter((d) => d.isCorrect).length,
-  //   //   answers: details,
-  //   // };
-  // }
+    if (!test) {
+      throw HttpError({ message: 'Test not found' });
+    }
+    return test;
+  }
 
   async findAll(dto: FindAllTestDto) {
     const { limit = 10, page = 1 } = dto;
@@ -151,107 +161,55 @@ export class TestService {
     };
   }
 
-  async findOne(id: string) {
-    return this.prisma.test.findUnique({
+  async findAllOnlyTest(dto: FindAllTestDto) {
+    const { limit = 10, page = 1 } = dto;
+
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.test.findMany({
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.test.count(),
+    ]);
+
+    return {
+      total,
+      page,
+      limit,
+      data,
+    };
+  }
+
+  async updateOnlyTest(id: string, dto: UpdateTestDto) {
+    const test = await this.prisma.test.findUnique({
       where: { id },
-      include: {
-        parts: {
-          include: {
-            sections: {
-              include: {
-                questions: {
-                  include: {
-                    answers: true,
-                  },
-                },
-              },
-            },
-          },
-        },
+    });
+    if (!test) {
+      throw HttpError({ message: 'Test not found' });
+    }
+    if (dto.ieltsId) {
+      const ielts = await this.prisma.ielts.findUnique({
+        where: { id: dto.ieltsId },
+      });
+      if (!ielts) {
+        throw HttpError({ message: 'IELTS not found' });
+      }
+    }
+    return this.prisma.test.update({
+      where: { id },
+      data: {
+        title: dto.title || test.title,
+        type: dto.type || test.type,
+        description: dto.description || test.description,
+        ieltsId: dto.ieltsId || test.ieltsId,
       },
     });
   }
 
-  // async update(id: string, dto: UpdateTestDto) {
-  //   const test = await this.prisma.test.findUnique({
-  //     where: { id },
-  //     include: {
-  //       parts: {
-  //         include: {
-  //           sections: {
-  //             include: { questions: { include: { answers: true } } },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   });
-
-  //   if (!test) {
-  //     throw HttpError({ message: 'Test not found' });
-  //   }
-
-  //   if (dto.ieltsId) {
-  //     const ielts = await this.prisma.ielts.findUnique({
-  //       where: { id: dto.ieltsId },
-  //     }); 
-  //     if (!ielts) {
-  //       throw HttpError({ message: 'IELTS not found' });
-  //     }
-  //   }
-
-  //   return this.prisma.test.update({
-  //     where: { id },
-  //     data: {
-  //       title: dto.title,
-  //       type: dto.type,
-  //       ieltsId: dto.ieltsId,
-  //       parts: {
-  //         deleteMany: {},
-  //         create: dto.parts?.map((part) => ({
-  //           number: part.number,
-  //           audioUrl: part.audioUrl || null,
-  //           sections: {
-  //             create: part.sections.map((section) => ({
-  //               title: section.title,
-  //               content: section.content,
-  //               hasBullets: false,
-  //               questions: {
-  //                 create: section.questions.map((q) => ({
-  //                   number: q.number,
-  //                   type: q.type,
-  //                   text: q.text,
-  //                   answers: {
-  //                     create: q.answers.map((a) => ({
-  //                       answer: a.answer,
-  //                       correct: a.correct,
-  //                     })),
-  //                   },
-  //                 })),
-  //               },
-  //             })),
-  //           },
-  //         })),
-  //       },
-  //     },
-  //     include: {
-  //       parts: {
-  //         include: {
-  //           sections: {
-  //             include: {
-  //               questions: {
-  //                 include: {
-  //                   answers: true,
-  //                 },
-  //               },
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   });
-  // }
-
-  remove(id: number) {
-    return `This action removes a #${id} test`;
+  removeOnlyTest(id: string) {
+    return this.prisma.test.delete({
+      where: { id },
+    });
   }
 }

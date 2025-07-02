@@ -9,6 +9,10 @@ import { ExamModule } from './modules/exam/exam.module';
 import { FileModule } from './modules/file/file.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { PartsModule } from './modules/parts/parts.module';
+import { SectionModule } from './modules/section/section.module';
+import { QuestionModule } from './modules/question/question.module';
+import { AnswerModule } from './modules/answer/answer.module';
 
 @Module({
   controllers: [],
@@ -20,12 +24,16 @@ import { join } from 'path';
     }),
     AdminModule,
     PrismaModule,
-    FollowsModule,
     UserModule,
-    TestModule,
     IeltsModule,
+    TestModule,
+    PartsModule,
+    SectionModule,
+    QuestionModule,
+    AnswerModule,
     ExamModule,
     FileModule,
+    FollowsModule,
   ],
 })
 export class AppModule {}
