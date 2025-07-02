@@ -46,7 +46,6 @@ export class AdminService implements OnModuleInit {
 
   async login(dto: LoginAdminDto) {
     const { name, password } = dto;
-    console.log(name, password);
 
     const admin = await this.prisma.admin.findFirst({
       where: { name: name },

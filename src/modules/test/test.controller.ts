@@ -65,12 +65,6 @@ export class TestController {
     return this.testService.updateOnlyTest(id, dto);
   }
 
-  @Delete('only/:id')
-  @DecoratorWrapper('removeOnlyTest')
-  removeOnlyTest(@Param('id') id: string) {
-    return this.testService.removeOnlyTest(id);
-  }
-
   // @Post()
   // @DecoratorWrapper('createTest', true, [Role.ADMIN])
   // createTest(@Body() dto: CreateTestDto) {
@@ -87,6 +81,12 @@ export class TestController {
   @DecoratorWrapper('findOneTest')
   findOne(@Param('id') id: string) {
     return this.testService.findOneOnlyTest(id);
+  }
+
+  @Delete('with/:id')
+  @DecoratorWrapper('removeTest')
+  removeTest(@Param('id') id: string) {
+    return this.testService.removeTest(id);
   }
 
   @Delete(':id')

@@ -86,7 +86,7 @@ export class ExamService {
     return `This action returns all exam`;
   }
 
-  async findUserTestAnswers( testResultId: string) {
+  async findUserTestAnswers(testResultId: string) {
     const testResult = await this.prisma.testResult.findMany({
       where: {
         id: testResultId,
@@ -96,7 +96,7 @@ export class ExamService {
           include: {
             question: {
               include: {
-                answers: true, 
+                answers: true,
               },
             },
           },
@@ -106,18 +106,15 @@ export class ExamService {
     return testResult;
   }
 
-
   async findOneUserTestResult(userId: string) {
     const testResult = await this.prisma.testResult.findMany({
       where: {
         userId,
       },
       include: {
-        test: true, // testni qo‘shamiz
+        test: true, 
       },
     });
-
-    console.log('Test Result:', testResult);
 
     return testResult;
   }

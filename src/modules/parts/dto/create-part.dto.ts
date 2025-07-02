@@ -11,6 +11,11 @@ export class CreatePartDto {
   @IsOptional()
   title?: string;
 
+  @ApiPropertyOptional({ example: 'description' })
+  @IsString()
+  @IsOptional()
+  description?: string;
+
   @ApiPropertyOptional({ example: 'https://audio-url.mp3' })
   @IsString()
   @IsOptional()

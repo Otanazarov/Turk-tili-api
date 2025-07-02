@@ -207,8 +207,20 @@ export class TestService {
     });
   }
 
-  removeOnlyTest(id: string) {
+
+  async removeTest(id: string) {
+    const test = await this.prisma.test.findUnique({ where: { id } });
+    if (!test) {
+      throw HttpError({ message: 'Test not found' });
+    }
+  
     return this.prisma.test.delete({
+      where: { id },
+    });
+  }
+
+  async removeOnlyTest(id: string) {
+    return await this.prisma.test.delete({
       where: { id },
     });
   }

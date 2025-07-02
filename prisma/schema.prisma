@@ -92,7 +92,7 @@ model Test {
 
 model Part {
   id          String  @id @default(uuid())
-  test        Test    @relation(fields: [testId], references: [id])
+  test        Test    @relation(fields: [testId], references: [id], onDelete: Cascade)
   testId      String
   number      Int
   title       String?
@@ -106,7 +106,7 @@ model Part {
 
 model Section {
   id         String  @id @default(uuid())
-  part       Part    @relation(fields: [partId], references: [id])
+  part       Part    @relation(fields: [partId], references: [id], onDelete: Cascade)
   partId     String
   title      String?
   content    String?
@@ -119,12 +119,12 @@ model Section {
 }
 
 model Question {
-  id         String       @id @default(uuid())
-  section    Section      @relation(fields: [sectionId], references: [id])
-  sectionId  String
-  number     Int
-  text       String?
-  type       QuestionType
+  id        String       @id @default(uuid())
+  section   Section      @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId String
+  number    Int
+  text      String?
+  type      QuestionType
 
   answers     Answer[]
   userAnswers UserAnswer[]
@@ -134,7 +134,7 @@ model Question {
 
 model Answer {
   id          String   @id @default(uuid())
-  question    Question @relation(fields: [questionId], references: [id])
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId  String
   variantText String?
   answer      String? // "A" yoki "A,C" formatida
@@ -153,7 +153,7 @@ model TestResult {
   testId      String
   score       Float
   startedAt   DateTime  @default(now())
-  completedAt DateTime? 
+  completedAt DateTime?
 
   userAnswers UserAnswer[]
   createdAt   DateTime     @default(now())
