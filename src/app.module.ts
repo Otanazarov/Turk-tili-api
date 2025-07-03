@@ -13,7 +13,7 @@ import { PartsModule } from './modules/parts/parts.module';
 import { SectionModule } from './modules/section/section.module';
 import { QuestionModule } from './modules/question/question.module';
 import { AnswerModule } from './modules/answer/answer.module';
-
+import { WritingTestModule } from './modules/writing-test/writing-test.module';
 @Module({
   controllers: [],
   providers: [],
@@ -34,6 +34,7 @@ import { AnswerModule } from './modules/answer/answer.module';
     ExamModule,
     FileModule,
     FollowsModule,
+    WritingTestModule,
   ],
 })
 export class AppModule {}

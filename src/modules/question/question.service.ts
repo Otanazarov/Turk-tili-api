@@ -72,9 +72,9 @@ export class QuestionService {
     return this.prisma.question.update({
       where: { id },
       data: {
-        number: updateQuestionDto.number || question.number,
-        text: updateQuestionDto.text || question.text,
-        type: updateQuestionDto.type || question.type,
+        number: updateQuestionDto.number ?? question.number,
+        text: updateQuestionDto.text ?? question.text,
+        type: updateQuestionDto.type ?? question.type,
       },
     });
   }

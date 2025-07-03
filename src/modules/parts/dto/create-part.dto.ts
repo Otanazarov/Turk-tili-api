@@ -11,7 +11,7 @@ export class CreatePartDto {
   @IsOptional()
   title?: string;
 
-  @ApiPropertyOptional({ example: 'description' })
+  @ApiPropertyOptional({ example: 'wdescription' })
   @IsString()
   @IsOptional()
   description?: string;

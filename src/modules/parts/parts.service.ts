@@ -72,9 +72,9 @@ export class PartsService {
     return this.prisma.part.update({
       where: { id },
       data: {
-        number: updatePartDto.number || part.number,
-        title: updatePartDto.title || part.title,
-        audioUrl: updatePartDto.audioUrl || part.audioUrl,
+        number: updatePartDto.number ?? part.number,
+        title: updatePartDto.title ?? part.title,
+        audioUrl: updatePartDto.audioUrl ?? part.audioUrl,
       },
     });
   }

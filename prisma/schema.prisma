@@ -15,6 +15,7 @@ enum Role {
 enum TestType {
   LISTENING
   READING
+  WRITING
 }
 
 enum QuestionType {
@@ -49,9 +50,11 @@ model User {
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
-  testResults TestResult[]
-  following   Follows[]    @relation("Following")
-  followers   Follows[]    @relation("Followers")
+  testResults       TestResult[]
+  following         Follows[]           @relation("Following")
+  followers         Follows[]           @relation("Followers")
+  // WritingSubmission WritingSubmission[]
+  WritingSubmission WritingSubmission[]
 }
 
 model Admin {
@@ -67,11 +70,12 @@ model Admin {
 }
 
 model Ielts {
-  id        String   @id @default(uuid())
-  title     String
-  tests     Test[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String        @id @default(uuid())
+  title       String
+  tests       Test[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  WritingTest WritingTest[]
 }
 
 model Test {
@@ -186,4 +190,34 @@ model Follows {
   updatedAt   DateTime @updatedAt
 
   @@unique([followerId, followingId])
+}
+
+model WritingTest {
+  id          String   @id @default(uuid())
+  task1       String
+  task2       String
+  task1Title  String
+  task2Title  String
+  instruction String?
+  title       String
+  type        String
+  ielts       Ielts    @relation(fields: [ieltsId], references: [id])
+  ieltsId     String // <- foreign key
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  submissions WritingSubmission[]
+}
+
+model WritingSubmission {
+  id            String      @id @default(uuid())
+  user          User        @relation(fields: [userId], references: [id])
+  userId        String
+  writingTestId String // yoki umumiy testId bo‘lsa ham bo‘ladi
+  task1Answer   String
+  task2Answer   String
+  aiFeedback    String? // AI'dan qaytgan baho (to‘liq JSON bo‘lishi ham mumkin)
+  score         Float? // umumiy baho
+  submittedAt   DateTime    @default(now())
+  WritingTest   WritingTest @relation(fields: [writingTestId], references: [id])
 }

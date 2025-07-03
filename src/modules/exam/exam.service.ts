@@ -82,8 +82,19 @@ export class ExamService {
     };
   }
 
-  findAll() {
-    return `This action returns all exam`;
+  async findAllTestResults( ) {
+    return this.prisma.testResult.findMany({
+      include: {
+        user: {
+          select: { id: true, name: true, email: true }
+        },
+        test: {
+          select: { id: true, title: true }
+        },
+        userAnswers: true,
+      },
+      orderBy: { createdAt: 'desc' }
+    });
   }
 
   async findUserTestAnswers(testResultId: string) {

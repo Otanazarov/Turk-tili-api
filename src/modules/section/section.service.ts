@@ -71,15 +71,15 @@ export class SectionService {
     const updatedSection = this.prisma.section.update({
       where: { id },
       data: {
-        title: updateSectionDto.title || section.title,
-        content: updateSectionDto.content || section.content,
-        imageUrl: updateSectionDto.imageUrl || section.imageUrl,
+        title: updateSectionDto.title ?? section.title,
+        content: updateSectionDto.content ?? section.content,
+        imageUrl: updateSectionDto.imageUrl ?? section.imageUrl,
       },
     });
     if (!section) {
       throw HttpError({ message: 'Section not found' });
     }
-    return section;
+    return updatedSection;
   }
 
   async remove(id: string) {

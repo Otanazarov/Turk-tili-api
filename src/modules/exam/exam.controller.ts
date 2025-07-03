@@ -30,8 +30,10 @@ export class ExamController {
   }
 
   @Get()
-  findAll() {
-    return this.examService.findAll();
+  @Get('all-results')
+  @DecoratorWrapper('getAllTestResults', true, [Role.ADMIN])
+  async getAllTest() {
+    return this.examService.findAllTestResults();
   }
 
   @Get('user-answers')

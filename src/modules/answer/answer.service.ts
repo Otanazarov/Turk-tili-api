@@ -70,9 +70,9 @@ export class AnswerService {
     return this.prisma.answer.update({
       where: { id },
       data: {
-        answer: updateAnswerDto.answer || answer.answer,
-        correct: updateAnswerDto.correct || answer.correct,
-        variantText: updateAnswerDto.variantText || answer.variantText,
+        answer: updateAnswerDto.answer ?? answer.answer,
+        correct: updateAnswerDto.correct ?? answer.correct,
+        variantText: updateAnswerDto.variantText ?? answer.variantText,
       },
     });
   }

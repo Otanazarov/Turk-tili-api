@@ -80,9 +80,9 @@ export class TestService {
     }
     return this.prisma.test.create({
       data: {
-        title: dto.title || null,
+        title: dto.title ?? null,
         type: dto.type,
-        description: dto.description || null,
+        description: dto.description ?? null,
         ieltsId: dto.ieltsId,
       },
     });
@@ -199,21 +199,20 @@ export class TestService {
     return this.prisma.test.update({
       where: { id },
       data: {
-        title: dto.title || test.title,
-        type: dto.type || test.type,
-        description: dto.description || test.description,
-        ieltsId: dto.ieltsId || test.ieltsId,
+        title: dto.title ?? test.title,
+        type: dto.type ?? test.type,
+        description: dto.description ?? test.description,
+        ieltsId: dto.ieltsId ?? test.ieltsId,
       },
     });
   }
-
 
   async removeTest(id: string) {
     const test = await this.prisma.test.findUnique({ where: { id } });
     if (!test) {
       throw HttpError({ message: 'Test not found' });
     }
-  
+
     return this.prisma.test.delete({
       where: { id },
     });
