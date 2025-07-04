@@ -40,12 +40,15 @@ enum IELTSLevel {
 model User {
   id           String      @id @default(uuid())
   email        String      @unique
-  password     String
+  password     String?
   name         String?
+  username     String?
   avatarUrl    String?
   role         Role        @default(USER)
-  level        IELTSLevel? @default(A2)
+  level        IELTSLevel?
   targetScore  Float?
+  googleId     String?
+  provider     String
   refreshToken String?
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
@@ -53,7 +56,6 @@ model User {
   testResults       TestResult[]
   following         Follows[]           @relation("Following")
   followers         Follows[]           @relation("Followers")
-  // WritingSubmission WritingSubmission[]
   WritingSubmission WritingSubmission[]
 }
 

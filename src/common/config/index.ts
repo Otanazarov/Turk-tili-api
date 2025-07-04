@@ -9,5 +9,7 @@ export const env = cleanEnv(process.env, {
   ACCESS_TOKEN_SECRET: str(),
   REFRESH_TOKEN_SECRET: str(),
   PASSPHRASE: str(),
-  
+  GOOGLE_CLIENT_ID: str(),
+  GOOGLE_CLIENT_SECRET: str(),
+  GOOGLE_CALLBACK_URL: str(),
 });

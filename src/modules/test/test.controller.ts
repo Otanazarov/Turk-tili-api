@@ -23,7 +23,7 @@ import { UpdateTestDto } from './dto/update.test.dto';
 export class TestController {
   constructor(private readonly testService: TestService) {}
 
-  @Post('with')
+  @Post('')
   @DecoratorWrapper('createTestWithAddition', true, [Role.ADMIN])
   create(@Body() createTestDto: CreateAllTestDto) {
     return this.testService.createTestWithAddition(createTestDto);
@@ -35,7 +35,7 @@ export class TestController {
     return this.testService.createTest(dto);
   }
 
-  @Get('with/:id')
+  @Get('/:id')
   @DecoratorWrapper('findOneTestWithAddition')
   findOneTestWithAddition(@Param('id') id: string) {
     return this.testService.findOneTestWithAddition(id);
@@ -47,7 +47,7 @@ export class TestController {
     return this.testService.findOneOnlyTest(id);
   }
 
-  @Get('with')
+  @Get('')
   @DecoratorWrapper('findAllWithAddition')
   findAllWithAddition(@Query() dto: FindAllTestDto) {
     return this.testService.findAll(dto);
@@ -71,25 +71,13 @@ export class TestController {
   //   return this.testCreateService.createTest(dto);
   // }
 
-  @Get()
-  @DecoratorWrapper('findAllTest')
-  findAll(@Query() dto: FindAllTestDto) {
-    return this.testService.findAll(dto);
-  }
-
-  @Get(':id')
-  @DecoratorWrapper('findOneTest')
-  findOne(@Param('id') id: string) {
-    return this.testService.findOneOnlyTest(id);
-  }
-
-  @Delete('with/:id')
+  @Delete(':id')
   @DecoratorWrapper('removeTest')
   removeTest(@Param('id') id: string) {
     return this.testService.removeTest(id);
   }
 
-  @Delete(':id')
+  @Delete('only/:id')
   @DecoratorWrapper('removeOnlyTest')
   remove(@Param('id') id: string) {
     return this.testService.removeOnlyTest(id);

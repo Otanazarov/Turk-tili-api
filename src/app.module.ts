@@ -14,6 +14,7 @@ import { SectionModule } from './modules/section/section.module';
 import { QuestionModule } from './modules/question/question.module';
 import { AnswerModule } from './modules/answer/answer.module';
 import { WritingTestModule } from './modules/writing-test/writing-test.module';
+import { AuthModule } from './common/auth/auth.module';
 @Module({
   controllers: [],
   providers: [],
@@ -35,6 +36,7 @@ import { WritingTestModule } from './modules/writing-test/writing-test.module';
     FileModule,
     FollowsModule,
     WritingTestModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

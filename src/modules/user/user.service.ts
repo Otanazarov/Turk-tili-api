@@ -18,10 +18,29 @@ import { RefreshUserDto } from './dto/refresh-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from '@prisma/client';
+import { CreateGoogleUserDto } from './dto/register-user-with-google.dto';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
+  async createGoogleUser(profile: CreateGoogleUserDto) {
+    return this.prisma.user.create({
+      data: {
+        email: profile.email,
+        name: profile.name,
+        avatarUrl: profile.avatarUrl,
+        googleId: profile.googleId,
+        provider: 'google',
+      },
+    });
+  }
 
   async register(registerUserDto: RegisterUserDto) {
     const existingUser = await this.prisma.user.findFirst({
@@ -40,7 +59,14 @@ export class UserService {
     registerUserDto.password = hashedPassword;
 
     const user = await this.prisma.user.create({
-      data: { ...registerUserDto },
+      data: {
+        email: registerUserDto.email,
+        password: registerUserDto.password,
+        provider: 'local',
+        avatarUrl: registerUserDto.avatarUrl,
+        name: registerUserDto.name,
+        username: registerUserDto.username ?? null,
+      },
     });
     delete user.password;
     return user;
@@ -177,12 +203,6 @@ export class UserService {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          name: true,
-          createdAt: true,
-          updatedAt: true,
-        },
       }),
       this.prisma.user.count({
         where: {
@@ -205,12 +225,6 @@ export class UserService {
   async findOne(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      select: {
-        id: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
     if (!user) {
       throw HttpError({ code: 'User not found' });
