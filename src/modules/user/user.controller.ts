@@ -7,7 +7,6 @@ import {
   Param,
   Query,
   Req,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { FindAllUserQueryDto } from './dto/findAll-user.dto';
@@ -18,7 +17,7 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
-@ApiTags("User")
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -55,16 +54,13 @@ export class UserController {
 
   @Get(':id')
   @DecoratorWrapper('Get User by ID', true, [Role.USER])
-  findOne(@Param('id', ParseIntPipe) id: string) {
+  findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
 
   @Patch(':id')
   @DecoratorWrapper('Update User', true, [Role.USER])
-  update(
-    @Param('id', ParseIntPipe) id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
 

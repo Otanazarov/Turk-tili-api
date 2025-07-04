@@ -58,6 +58,13 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(registerUserDto.password, 10);
     registerUserDto.password = hashedPassword;
 
+    const username = await this.prisma.user.findUnique({
+      where: { username: registerUserDto.username },
+    });
+    if (username) {
+      throw new HttpError({ message: 'Username busy' });
+    }
+
     const user = await this.prisma.user.create({
       data: {
         email: registerUserDto.email,
@@ -233,16 +240,32 @@ export class UserService {
   }
 
   async update(id: string, dto: UpdateUserDto) {
-    const user = await this.prisma.user.findUnique({ where: { id: id } });
+    const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) throw HttpError({ code: 'User not found' });
 
     const updateData: any = {
-      name: dto.name || user.name,
+      name: dto.name ?? user.name,
+      username: dto.username ?? user.username,
+      avatarUrl: dto.avatarUrl ?? user.avatarUrl,
+      level: dto.level ?? user.level,
+      targetScore: dto.targetScore ?? user.targetScore,
     };
+    if (dto.username && dto.username !== user.username) {
+      const usernameTaken = await this.prisma.user.findUnique({
+        where: { username: dto.username },
+      });
+
+      if (usernameTaken) {
+        throw HttpError({ code: 'Username is already taken' });
+      }
+
+      updateData.username = dto.username;
+    }
 
     if (dto.newPassword) {
-      if (!dto.oldPassword)
+      if (!dto.oldPassword) {
         throw HttpError({ code: 'The previous password is required' });
+      }
 
       const match = await bcrypt.compare(dto.oldPassword, user.password);
       if (!match) throw HttpError({ code: 'Wrong password' });
@@ -253,12 +276,6 @@ export class UserService {
     const updatedUser = await this.prisma.user.update({
       where: { id },
       data: updateData,
-      select: {
-        id: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
-      },
     });
 
     return updatedUser;

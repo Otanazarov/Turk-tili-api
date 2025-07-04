@@ -7,7 +7,6 @@ import {
   Param,
   Query,
   Req,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { FindAllAdminQueryDto } from './dto/findAll-admin.dto';
@@ -54,14 +53,14 @@ export class AdminController {
 
   @Get(':id')
   @DecoratorWrapper('Get Admin by ID', true, [Role.ADMIN])
-  findOne(@Param('id', ParseIntPipe) id: string) {
+  findOne(@Param('id') id: string) {
     return this.adminService.findOne(id);
   }
 
   @Patch(':id')
   @DecoratorWrapper('Update Admin', true, [Role.ADMIN])
   update(
-    @Param('id', ParseIntPipe) id: string,
+    @Param('id',) id: string,
     @Body() updateAdminDto: UpdateAdminDto,
   ) {
     return this.adminService.update(id, updateAdminDto);
