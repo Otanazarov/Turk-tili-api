@@ -27,6 +27,12 @@ enum QuestionType {
   FILL_BLANK
 }
 
+enum SpeakingSectionType {
+  PART1
+  PART2
+  PART3
+}
+
 enum IELTSLevel {
   A0
   A1
@@ -53,10 +59,11 @@ model User {
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
-  testResults       TestResult[]
-  following         Follows[]           @relation("Following")
-  followers         Follows[]           @relation("Followers")
-  WritingSubmission WritingSubmission[]
+  testResults        TestResult[]
+  following          Follows[]            @relation("Following")
+  followers          Follows[]            @relation("Followers")
+  WritingSubmission  WritingSubmission[]
+  SpeakingSubmission SpeakingSubmission[]
 }
 
 model Admin {
@@ -72,12 +79,13 @@ model Admin {
 }
 
 model Ielts {
-  id          String        @id @default(uuid())
-  title       String
-  tests       Test[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  WritingTest WritingTest[]
+  id           String         @id @default(uuid())
+  title        String
+  tests        Test[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  WritingTest  WritingTest[]
+  SpeakingTest SpeakingTest[]
 }
 
 model Test {
@@ -223,3 +231,78 @@ model WritingSubmission {
   submittedAt   DateTime    @default(now())
   WritingTest   WritingTest @relation(fields: [writingTestId], references: [id])
 }
+
+model SpeakingTest {
+  id        String   @id @default(uuid())
+  title     String
+  ielts     Ielts    @relation(fields: [ieltsId], references: [id])
+  ieltsId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sections    SpeakingSection[]
+  submissions SpeakingSubmission[]
+}
+
+
+model SpeakingSection {
+  id             String           @id @default(uuid())
+  speakingTest   SpeakingTest     @relation(fields: [speakingTestId], references: [id], onDelete: Cascade)
+  speakingTestId String
+  order          Int              // 1, 2, 3
+  title          String?
+  description    String?
+  images         String[]         @default([]) // optional list sifatida
+  type           SpeakingSectionType
+
+  subParts  SpeakingSubPart[]
+  questions SpeakingQuestion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SpeakingSubPart {
+  id          String           @id @default(uuid())
+  section     SpeakingSection  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId   String
+  label       String           // "1.1", "1.2", ...
+  description String?
+
+  questions   SpeakingQuestion[] // inverse side: onDelete yozilmaydi
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model SpeakingQuestion {
+  id            String            @id @default(uuid())
+  section       SpeakingSection?  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId     String?
+  subPart       SpeakingSubPart?  @relation(fields: [subPartId], references: [id], onDelete: Cascade)
+  subPartId     String?
+
+  order         Int
+  questionText  String
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+
+model SpeakingSubmission {
+  id             String         @id @default(uuid())
+  user           User           @relation(fields: [userId], references: [id])
+  userId         String
+
+  speakingTest   SpeakingTest   @relation(fields: [speakingTestId], references: [id], onDelete: Cascade)
+  speakingTestId String
+
+  answers        Json          
+  aiFeedback     Json?         
+  score          Float?         
+
+  submittedAt    DateTime @default(now())
+}
+
