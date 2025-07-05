@@ -77,4 +77,23 @@ export class AuthService {
       user,
     };
   }
+
+  async getMe(userId: string) {
+    return this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        username: true,
+        avatarUrl: true,
+        level: true,
+        targetScore: true,
+        googleId: true,
+        provider: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
 }

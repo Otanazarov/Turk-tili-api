@@ -2,8 +2,12 @@ import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { AuthService } from './auth.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { env } from '../config';
+import { AuthorizationGuard } from './auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { DecoratorWrapper } from './decorator.auth';
+import { Role } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -14,10 +18,17 @@ export class AuthController {
     const { accessToken, refreshToken } =
       await this.authService.validateOAuthLogin(req.user);
 
-    console.log(env.FRONTEND_URL);
+    console.log('a', accessToken);
 
     return res.redirect(
       `${env.FRONTEND_URL}?accessToken=${accessToken}&refreshToken=${refreshToken}`,
     );
+  }
+
+  @Get('me')
+  @DecoratorWrapper('getMe', true, [Role.USER])
+  async getMe(@Req() req: Request) {
+    const userId = req.user['id'];
+    return this.authService.getMe(userId);
   }
 }

@@ -17,13 +17,10 @@ import {
 } from '@nestjs/swagger';
 import { SpeakingTestService } from './speaking-test.service';
 import { CreateSpeakingTestDto } from './dto/create-speaking-test.dto';
-import { UpdateSpeakingTestDto } from './dto/update-speaking-test.dto';
-
-import { RolesGuard } from '../../common/auth/roles/roles.guard';
-import { Roles } from '../../common/auth/roles/roles.decorator';
 import { Role } from '@prisma/client';
 import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { FindAllSpeakingTestDto } from './dto/findAll-speaking.test.dto';
+import { createOnlySpeakingTestDto } from './dto/create-only0speaking-test.dto';
 
 @ApiTags('Speaking Test')
 @Controller('speaking-test')
@@ -36,16 +33,34 @@ export class SpeakingTestController {
     return this.speakingTestService.create(createSpeakingTestDto);
   }
 
+  @Post('only')
+  @DecoratorWrapper('CreateOnlySpeakingTest', true, [Role.ADMIN])
+  createOnlySpeakingTest(@Body() dto: createOnlySpeakingTestDto) {
+    return this.speakingTestService.createOnlySpeakingTest(dto);
+  }
+
   @Get()
   @DecoratorWrapper('FindAllSpeakingTest')
   findAll(@Query() dto: FindAllSpeakingTestDto) {
     return this.speakingTestService.findAll(dto);
   }
 
+  @Get('only')
+  @DecoratorWrapper('FindAllOnlySpeakingTest')
+  async findAllOnlySpeakingTest(@Query() dto: FindAllSpeakingTestDto) {
+    return this.speakingTestService.findAllOnlySpeakingTest(dto);
+  }
+
   @Get(':id')
   @DecoratorWrapper('FindOneSpeakingTest')
   findOne(@Param('id') id: string) {
     return this.speakingTestService.findOne(id);
+  }
+
+  @Get('only/:id')
+  @DecoratorWrapper('FindOneOnlySpeakingTest')
+  async FindOneOnlySpeakingTest(@Param('id') id: string) {
+    return this.speakingTestService.findOneOnlySpeakingTest(id);
   }
 
   @Delete(':id')

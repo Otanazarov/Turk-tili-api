@@ -244,16 +244,19 @@ model SpeakingTest {
   submissions SpeakingSubmission[]
 }
 
-
 model SpeakingSection {
-  id             String           @id @default(uuid())
-  speakingTest   SpeakingTest     @relation(fields: [speakingTestId], references: [id], onDelete: Cascade)
+  id             String              @id @default(uuid())
+  speakingTest   SpeakingTest        @relation(fields: [speakingTestId], references: [id], onDelete: Cascade)
   speakingTestId String
-  order          Int              // 1, 2, 3
+  order          Int // 1, 2, 3
   title          String?
   description    String?
-  images         String[]         @default([]) // optional list sifatida
+  images         String[]            @default([]) // optional list sifatida
   type           SpeakingSectionType
+  content        String?
+
+  advantages    String[] @default([]) // <-- YANGI
+  disadvantages String[] @default([]) // <-- YANGI
 
   subParts  SpeakingSubPart[]
   questions SpeakingQuestion[]
@@ -263,46 +266,43 @@ model SpeakingSection {
 }
 
 model SpeakingSubPart {
-  id          String           @id @default(uuid())
-  section     SpeakingSection  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  id          String          @id @default(uuid())
+  section     SpeakingSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   sectionId   String
-  label       String           // "1.1", "1.2", ...
+  label       String // "1.1", "1.2", ...
   description String?
 
-  questions   SpeakingQuestion[] // inverse side: onDelete yozilmaydi
+  questions SpeakingQuestion[] // inverse side: onDelete yozilmaydi
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-
 model SpeakingQuestion {
-  id            String            @id @default(uuid())
-  section       SpeakingSection?  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  sectionId     String?
-  subPart       SpeakingSubPart?  @relation(fields: [subPartId], references: [id], onDelete: Cascade)
-  subPartId     String?
+  id        String           @id @default(uuid())
+  section   SpeakingSection? @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId String?
+  subPart   SpeakingSubPart? @relation(fields: [subPartId], references: [id], onDelete: Cascade)
+  subPartId String?
 
-  order         Int
-  questionText  String
+  order        Int
+  questionText String
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
 
 model SpeakingSubmission {
-  id             String         @id @default(uuid())
-  user           User           @relation(fields: [userId], references: [id])
-  userId         String
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
-  speakingTest   SpeakingTest   @relation(fields: [speakingTestId], references: [id], onDelete: Cascade)
+  speakingTest   SpeakingTest @relation(fields: [speakingTestId], references: [id], onDelete: Cascade)
   speakingTestId String
 
-  answers        Json          
-  aiFeedback     Json?         
-  score          Float?         
+  answers    Json
+  aiFeedback Json?
+  score      Float?
 
-  submittedAt    DateTime @default(now())
+  submittedAt DateTime @default(now())
 }
-

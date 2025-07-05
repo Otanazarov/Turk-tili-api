@@ -42,8 +42,6 @@ export class CreateSpeakingSubPartDto {
   @IsString()
   description?: string;
 
-  
-
   @ApiProperty({
     description: 'SubPart ichidagi savollar',
     type: [CreateSpeakingQuestionDto],
@@ -55,6 +53,23 @@ export class CreateSpeakingSubPartDto {
 
 // 4️⃣ SECTION DTO (PART1, PART2, PART3)
 export class CreateSpeakingSectionDto {
+  @ApiPropertyOptional({ example: 'Savol matni' })
+  @IsOptional()
+  @IsString()
+  content?: string;
+
+  @ApiPropertyOptional({ type: [String] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  advantages?: string[];
+
+  @ApiPropertyOptional({ type: [String] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  disadvantages?: string[];
+  
   @ApiProperty({ example: 1, description: 'Section tartib raqami (1, 2, 3)' })
   @IsNumber()
   order: number;
