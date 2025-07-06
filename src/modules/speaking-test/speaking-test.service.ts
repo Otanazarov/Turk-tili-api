@@ -16,7 +16,7 @@ export class SpeakingTestService {
     if (!ielts) {
       throw new HttpError({ message: 'IELTS not found' });
     }
-  
+
     return this.prisma.speakingTest.create({
       data: {
         title: dto.title,
@@ -33,34 +33,36 @@ export class SpeakingTestService {
               advantages: section.advantages || [],
               disadvantages: section.disadvantages || [],
             };
-  
+
             // ✅ PART1: subParts bilan
             if (section.type === 'PART1') {
               return {
                 ...baseSection,
                 subParts: {
-                  create: section.subParts?.map((sub) => ({
-                    label: sub.label,
-                    description: sub.description,
-                    questions: {
-                      create: sub.questions.map((q) => ({
-                        order: q.order,
-                        questionText: q.question,
-                      })),
-                    },
-                  })) || [],
+                  create:
+                    section.subParts?.map((sub) => ({
+                      label: sub.label,
+                      description: sub.description,
+                      questions: {
+                        create: sub.questions.map((q) => ({
+                          order: q.order,
+                          questionText: q.question,
+                        })),
+                      },
+                    })) || [],
                 },
               };
             }
-  
+
             // ✅ PART2 & PART3: faqat questions bilan
             return {
               ...baseSection,
               questions: {
-                create: section.questions?.map((q) => ({
-                  order: q.order,
-                  questionText: q.question,
-                })) || [],
+                create:
+                  section.questions?.map((q) => ({
+                    order: q.order,
+                    questionText: q.question,
+                  })) || [],
               },
             };
           }),
@@ -80,7 +82,6 @@ export class SpeakingTestService {
       },
     });
   }
-  
 
   async createOnlySpeakingTest(dto: createOnlySpeakingTestDto) {
     const ielts = await this.prisma.ielts.findUnique({
@@ -152,16 +153,17 @@ export class SpeakingTestService {
     };
   }
 
-  async findOne(id: string) {
+  async findOneOnlySpeakingTest(id: string) {
     const speakingTest = await this.prisma.speakingTest.findUnique({
       where: { id },
     });
     if (!speakingTest) {
       throw new HttpError({ message: 'SpeakingTest not found' });
     }
+    return speakingTest;
   }
 
-  async findOneOnlySpeakingTest(id: string) {
+  async findOne(id: string) {
     const speakingTest = await this.prisma.speakingTest.findUnique({
       where: { id },
       include: {
@@ -180,9 +182,8 @@ export class SpeakingTestService {
     if (!speakingTest) {
       throw new HttpError({ message: 'SpeakingTest not found' });
     }
+    return speakingTest;
   }
-
-
 
   async remove(id: string) {
     const test = await this.prisma.speakingTest.findUnique({
