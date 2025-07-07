@@ -22,60 +22,46 @@ export class SpeakingTestService {
         title: dto.title,
         ieltsId: dto.ieltsId,
         sections: {
-          create: dto.sections.map((section) => {
-            const baseSection: any = {
-              order: section.order,
-              title: section.title,
-              description: section.description,
-              images: section.images || [],
-              type: section.type,
-              content: section.content || null,
-              advantages: section.advantages || [],
-              disadvantages: section.disadvantages || [],
-            };
-
-            // ✅ PART1: subParts bilan
-            if (section.type === 'PART1') {
-              return {
-                ...baseSection,
-                subParts: {
-                  create:
-                    section.subParts?.map((sub) => ({
-                      label: sub.label,
-                      description: sub.description,
-                      questions: {
-                        create: sub.questions.map((q) => ({
-                          order: q.order,
-                          questionText: q.question,
-                        })),
-                      },
-                    })) || [],
-                },
-              };
-            }
-
-            // ✅ PART2 & PART3: faqat questions bilan
-            return {
-              ...baseSection,
-              questions: {
-                create:
-                  section.questions?.map((q) => ({
+          create: dto.sections.map((section) => ({
+            order: section.order,
+            title: section.title,
+            description: section.description,
+            images: section.images || [],
+            type: section.type,
+            content: section.content || null,
+            points: {
+              create: section.points || [],
+            },
+            subParts: section.subParts
+              ? {
+                  create: section.subParts.map((sub) => ({
+                    label: sub.label,
+                    description: sub.description,
+                    questions: {
+                      create: sub.questions.map((q) => ({
+                        order: q.order,
+                        questionText: q.question,
+                      })),
+                    },
+                  })),
+                }
+              : undefined,
+            questions: section.questions
+              ? {
+                  create: section.questions.map((q) => ({
                     order: q.order,
                     questionText: q.question,
-                  })) || [],
-              },
-            };
-          }),
+                  })),
+                }
+              : undefined,
+          })),
         },
       },
       include: {
         sections: {
           include: {
-            subParts: {
-              include: {
-                questions: true,
-              },
-            },
+            points: true,
+            subParts: { include: { questions: true } },
             questions: true,
           },
         },

@@ -33,6 +33,11 @@ enum SpeakingSectionType {
   PART3
 }
 
+enum PointType {
+  ADVANTAGE
+  DISADVANTAGE
+}
+
 enum IELTSLevel {
   A0
   A1
@@ -255,14 +260,12 @@ model SpeakingSection {
   type           SpeakingSectionType
   content        String?
 
-  advantages    String[] @default([]) // <-- YANGI
-  disadvantages String[] @default([]) // <-- YANGI
-
   subParts  SpeakingSubPart[]
   questions SpeakingQuestion[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  points    SpeakingPoint[]
 }
 
 model SpeakingSubPart {
@@ -305,4 +308,16 @@ model SpeakingSubmission {
   score      Float?
 
   submittedAt DateTime @default(now())
+}
+
+model SpeakingPoint {
+  id        String          @id @default(uuid())
+  section   SpeakingSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId String
+  order     Int
+  type      PointType
+  question  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
