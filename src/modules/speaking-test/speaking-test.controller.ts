@@ -20,7 +20,7 @@ import { CreateSpeakingTestDto } from './dto/create-speaking-test.dto';
 import { Role } from '@prisma/client';
 import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { FindAllSpeakingTestDto } from './dto/findAll-speaking.test.dto';
-import { createOnlySpeakingTestDto } from './dto/create-only0speaking-test.dto';
+import { createOnlySpeakingTestDto } from './dto/create-only-speaking-test.dto';
 
 @ApiTags('Speaking Test')
 @Controller('speaking-test')

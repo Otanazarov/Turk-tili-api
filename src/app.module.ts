@@ -16,6 +16,11 @@ import { AnswerModule } from './modules/answer/answer.module';
 import { WritingTestModule } from './modules/writing-test/writing-test.module';
 import { AuthModule } from './common/auth/auth.module';
 import { SpeakingTestModule } from './modules/speaking-test/speaking-test.module';
+import { SmsModule } from './modules/sms/sms.module';
+import { SpeakingSectionModule } from './modules/speaking-section/speaking-section.module';
+import { SpeakingSubPartModule } from './modules/speaking-sub-part/speaking-sub-part.module';
+import { SpeakingQuestionModule } from './modules/speaking-question/speaking-question.module';
+import { SpeakingPointModule } from './modules/speaking-point/speaking-point.module';
 @Module({
   controllers: [],
   providers: [],
@@ -39,6 +44,11 @@ import { SpeakingTestModule } from './modules/speaking-test/speaking-test.module
     WritingTestModule,
     AuthModule,
     SpeakingTestModule,
+    SmsModule,
+    SpeakingSectionModule,
+    SpeakingSubPartModule,
+    SpeakingQuestionModule,
+    SpeakingPointModule,
   ],
 })
 export class AppModule {}

@@ -11,13 +11,22 @@ export const multerConfig = {
     },
   }),
   fileFilter: (req, file, cb) => {
-    if (file.mimetype === 'audio/mpeg') {
-      cb(null, true);
+    const allowedMimeTypes = [
+      'audio/mpeg', // MP3
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/webp',
+    ];
+
+    if (allowedMimeTypes.includes(file.mimetype)) {
+      cb(null, true); // Ruxsat berilgan fayl turi
     } else {
-      cb(new Error('Faqat MP3 fayllarga ruxsat berilgan'), false);
+      cb(new Error('Faqat MP3 yoki rasm fayllarga ruxsat berilgan'), false);
     }
   },
   limits: {
-    fileSize: 10 * 1024 * 1024, 
+    fileSize: 10 * 1024 * 1024, // 10 MB
   },
 };
+

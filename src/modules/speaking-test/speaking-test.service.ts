@@ -4,7 +4,7 @@ import { UpdateSpeakingTestDto } from './dto/update-speaking-test.dto';
 import { HttpError } from 'src/common/exception/http.error';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindAllSpeakingTestDto } from './dto/findAll-speaking.test.dto';
-import { createOnlySpeakingTestDto } from './dto/create-only0speaking-test.dto';
+import { createOnlySpeakingTestDto } from './dto/create-only-speaking-test.dto';
 
 @Injectable()
 export class SpeakingTestService {

@@ -82,7 +82,7 @@ export class CreateSpeakingSectionDto {
   @IsEnum(SpeakingSectionType)
   type: SpeakingSectionType;
 
-  @ApiPropertyOptional({ example: 'Part 1: Personal questions' })
+  @ApiPropertyOptional({ example: 'Part 1: Personal questionsss' })
   @IsOptional()
   @IsString()
   title?: string;

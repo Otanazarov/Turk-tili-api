@@ -19,10 +19,14 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from '@prisma/client';
 import { CreateGoogleUserDto } from './dto/register-user-with-google.dto';
+import { SmsService } from '../sms/sms.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly smsService: SmsService,
+  ) {}
 
   async findByEmail(email: string) {
     return this.prisma.user.findUnique({
@@ -49,34 +53,36 @@ export class UserService {
     if (existingUser) {
       throw HttpError({ code: 'User with this name already exists' });
     }
-    const existingEmail = await this.prisma.user.findUnique({
-      where: { email: registerUserDto.email },
-    });
-    if (existingEmail) {
-      throw HttpError({ message: 'Email already exists' });
-    }
+
     const hashedPassword = await bcrypt.hash(registerUserDto.password, 10);
     registerUserDto.password = hashedPassword;
 
     const username = await this.prisma.user.findUnique({
-      where: { username: registerUserDto.username },
+      where: { username: registerUserDto.userName },
     });
     if (username) {
       throw new HttpError({ message: 'Username busy' });
     }
 
-    const user = await this.prisma.user.create({
-      data: {
-        email: registerUserDto.email,
-        password: registerUserDto.password,
-        provider: 'local',
-        avatarUrl: registerUserDto.avatarUrl,
-        name: registerUserDto.name,
-        username: registerUserDto.username ?? null,
-      },
+    const sms = await this.smsService.sendOtp({
+      phone: registerUserDto.phoneNumber,
     });
-    delete user.password;
-    return user;
+
+    // const user = await this.prisma.user.create({
+    //   data: {
+    //     password: registerUserDto.password,
+    //     provider: 'local',
+    //     avatarUrl: registerUserDto.avatarUrl,
+    //     name: registerUserDto.name,
+    //     username: registerUserDto.userName ?? null,
+    //   },
+    // });
+    // delete user.password;
+    return 'Send OTP code';
+  }
+
+  async verifyOtp(){
+    
   }
 
   async login(dto: LoginUserDto) {
