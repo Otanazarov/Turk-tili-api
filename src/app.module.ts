@@ -21,6 +21,7 @@ import { SpeakingSectionModule } from './modules/speaking-section/speaking-secti
 import { SpeakingSubPartModule } from './modules/speaking-sub-part/speaking-sub-part.module';
 import { SpeakingQuestionModule } from './modules/speaking-question/speaking-question.module';
 import { SpeakingPointModule } from './modules/speaking-point/speaking-point.module';
+import { SpeakingSubmissionModule } from './modules/speaking-submission/speaking-submission.module';
 @Module({
   controllers: [],
   providers: [],
@@ -49,6 +50,7 @@ import { SpeakingPointModule } from './modules/speaking-point/speaking-point.mod
     SpeakingSubPartModule,
     SpeakingQuestionModule,
     SpeakingPointModule,
+    SpeakingSubmissionModule,
   ],
 })
 export class AppModule {}
