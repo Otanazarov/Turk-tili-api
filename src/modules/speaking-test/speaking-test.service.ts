@@ -5,10 +5,19 @@ import { HttpError } from 'src/common/exception/http.error';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindAllSpeakingTestDto } from './dto/findAll-speaking.test.dto';
 import { createOnlySpeakingTestDto } from './dto/create-only-speaking-test.dto';
+import { OpenAIService } from '../openAI/openAI.service';
 
 @Injectable()
 export class SpeakingTestService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly openAIService: OpenAIService,
+  ) {}
+
+  async convertAudioToText(audioBuffer: Buffer) {
+    return this.openAIService.speechToText(audioBuffer);
+  }
+
   async create(dto: CreateSpeakingTestDto) {
     const ielts = await this.prisma.ielts.findUnique({
       where: { id: dto.ieltsId },

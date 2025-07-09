@@ -23,6 +23,7 @@ import { SpeakingQuestionModule } from './modules/speaking-question/speaking-que
 import { SpeakingPointModule } from './modules/speaking-point/speaking-point.module';
 import { WritingSectionModule } from './modules/writing-section/writing-section.module';
 import { WritingSubPartModule } from './modules/writing-sub-part/writing-sub-part.module';
+import { SpeakingSubmissionModule } from './modules/speaking-submission/speaking-submission.module';
 @Module({
   controllers: [],
   providers: [],
@@ -53,6 +54,7 @@ import { WritingSubPartModule } from './modules/writing-sub-part/writing-sub-par
     SpeakingPointModule,
     WritingSectionModule,
     WritingSubPartModule,
+    SpeakingSubmissionModule,
   ],
 })
 export class AppModule {}
