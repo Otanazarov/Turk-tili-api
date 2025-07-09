@@ -337,12 +337,12 @@ model SpeakingSubmission {
 }
 
 model SpeakingPoint {
-  id        String          @id @default(uuid())
-  section   SpeakingSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  sectionId String
-  order     Int
-  type      PointType
-  question  String
+  id           String          @id @default(uuid())
+  section      SpeakingSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId    String
+  order        Int
+  type         PointType
+  questionText String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

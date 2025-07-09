@@ -22,7 +22,7 @@ export class SpeakingPointService {
         sectionId: createSpeakingPointDto.speakingSectionId,
         order: createSpeakingPointDto.order,
         type: createSpeakingPointDto.type,
-        question: createSpeakingPointDto.question,
+        question: createSpeakingPointDto.questionText,
       },
     });
 
@@ -85,11 +85,11 @@ export class SpeakingPointService {
     const existing = await this.prisma.speakingPoint.findUnique({
       where: { id },
     });
-  
+
     if (!existing) {
       throw new Error('Speaking point not found');
     }
-  
+
     return this.prisma.speakingPoint.delete({
       where: { id },
     });

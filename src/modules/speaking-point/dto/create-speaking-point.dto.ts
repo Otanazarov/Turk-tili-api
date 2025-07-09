@@ -19,5 +19,5 @@ export class CreateSpeakingPointDto {
   @ApiProperty({ example: 'University provides professional skills.' })
   @IsString()
   @IsNotEmpty()
-  question: string;
+  questionText: string;
 }
