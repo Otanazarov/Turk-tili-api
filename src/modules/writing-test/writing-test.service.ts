@@ -1,34 +1,54 @@
-import { Injectable } from '@nestjs/common';
-import { CreateWritingTestDto } from './dto/create-writing-test.dto';
-import { UpdateWritingTestDto } from './dto/update-writing-test.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { HttpError } from 'src/common/exception/http.error';
-import { FindAllWritingTestDto } from './dto/findAll-writingTest.dto';
+import { HttpError } from "src/common/exception/http.error";
+import { CreateWritingTestDto } from "./dto/create-writing-test.dto";
+import { PrismaService } from "../prisma/prisma.service";
+import { Injectable } from "@nestjs/common";
+import { FindAllWritingTestDto } from "./dto/findAll-writingTest.dto";
+import { UpdateWritingTestDto } from "./dto/update-writing-test.dto";
 
 @Injectable()
 export class WritingTestService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(createWritingTestDto: CreateWritingTestDto) {
+
+  async create(dto: CreateWritingTestDto) {
     const ielts = await this.prisma.ielts.findUnique({
-      where: { id: createWritingTestDto.ieltsId },
+      where: { id: dto.ieltsId },
     });
+
     if (!ielts) {
       throw new HttpError({ message: 'IELTS not found' });
     }
 
-    return await this.prisma.writingTest.create({
+    return this.prisma.writingTest.create({
       data: {
-        title: createWritingTestDto.title,
-        task1: createWritingTestDto.task1,
-        task2: createWritingTestDto.task2,
+        title: dto.title,
+        instruction: dto.instruction,
         type: 'WRITING',
-        task1Title: createWritingTestDto.task1Title,
-        task2Title: createWritingTestDto.task2Title,
-        instruction: createWritingTestDto.instruction,
-        ieltsId: createWritingTestDto.ieltsId,
+        ieltsId: dto.ieltsId,
+        sections: {
+          create: dto.sections.map((section) => ({
+            order: section.order,
+            title: section.title,
+            description: section.description,
+            subParts: {
+              create: section.subParts?.map((sub) => ({
+                order: sub.order,
+                label: sub.label,
+                question: sub.question,
+              })) || [],
+            },
+          })),
+        },
+      },
+      include: {
+        sections: {
+          include: {
+            subParts: true,
+          },
+        },
       },
     });
   }
+
   async findAll(dto: FindAllWritingTestDto) {
     const { limit = 10, page = 1 } = dto;
     const [data, total] = await this.prisma.$transaction([
@@ -36,6 +56,12 @@ export class WritingTestService {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
+        include: {
+          sections: {
+            include: { subParts: true },
+          },
+          ielts: true,
+        },
       }),
       this.prisma.writingTest.count(),
     ]);
@@ -49,13 +75,22 @@ export class WritingTestService {
   }
 
   async findOne(id: string) {
-    const writingTest = await this.prisma.writingTest.findUnique({
+    const test = await this.prisma.writingTest.findUnique({
       where: { id },
+      include: {
+        sections: {
+          include: {
+            subParts: true,
+          },
+        },
+      },
     });
-    if (!writingTest) {
+
+    if (!test) {
       throw new HttpError({ message: 'Writing test not found' });
     }
-    return writingTest;
+
+    return test;
   }
 
   async update(id: string, dto: UpdateWritingTestDto) {
@@ -64,16 +99,11 @@ export class WritingTestService {
     });
 
     if (!existing) {
-      throw new HttpError({
-        message: 'Writing test not found',
-        statusCode: 404,
-      });
+      throw new HttpError({ message: 'Writing test not found', statusCode: 404 });
     }
 
     if (dto.ieltsId) {
-      const ielts = await this.prisma.ielts.findUnique({
-        where: { id: dto.ieltsId },
-      });
+      const ielts = await this.prisma.ielts.findUnique({ where: { id: dto.ieltsId } });
       if (!ielts) {
         throw new HttpError({ message: 'IELTS not found', statusCode: 404 });
       }
@@ -83,24 +113,19 @@ export class WritingTestService {
       where: { id },
       data: {
         title: dto.title ?? existing.title,
-        task1: dto.task1 ?? existing.task1,
-        task2: dto.task2 ?? existing.task2,
-        task1Title: dto.task1Title ?? existing.task1Title,
-        task2Title: dto.task2Title ?? existing.task2Title,
         instruction: dto.instruction ?? existing.instruction,
-        type: existing.type,
         ieltsId: dto.ieltsId ?? existing.ieltsId,
       },
     });
   }
 
   async remove(id: string) {
-    const writingTest = await this.prisma.writingTest.findUnique({
-      where: { id },
-    });
-    if (!writingTest) {
-      throw new HttpError({ message: 'writingTest not found' });
+    const test = await this.prisma.writingTest.findUnique({ where: { id } });
+
+    if (!test) {
+      throw new HttpError({ message: 'Writing test not found' });
     }
+
     return this.prisma.writingTest.delete({ where: { id } });
   }
 }

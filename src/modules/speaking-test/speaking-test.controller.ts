@@ -21,6 +21,7 @@ import { Role } from '@prisma/client';
 import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { FindAllSpeakingTestDto } from './dto/findAll-speaking.test.dto';
 import { createOnlySpeakingTestDto } from './dto/create-only-speaking-test.dto';
+import { updateOnlySpeakingTestDto } from './dto/update-speaking-test.dto';
 
 @ApiTags('Speaking Test')
 @Controller('speaking-test')
@@ -61,6 +62,15 @@ export class SpeakingTestController {
   @DecoratorWrapper('FindOneOnlySpeakingTest')
   async FindOneOnlySpeakingTest(@Param('id') id: string) {
     return this.speakingTestService.findOneOnlySpeakingTest(id);
+  }
+
+  @Patch(':id')
+  @DecoratorWrapper('UpdateSpeakingTest', true, [Role.ADMIN])
+  update(
+    @Param('id') id: string,
+    @Body() updateSpeakingTestDto: updateOnlySpeakingTestDto,
+  ) {
+    return this.speakingTestService.update(id, updateSpeakingTestDto);
   }
 
   @Delete(':id')

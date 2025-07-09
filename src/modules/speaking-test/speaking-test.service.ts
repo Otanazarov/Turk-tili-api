@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSpeakingTestDto } from './dto/create-speaking-test.dto';
-import { UpdateSpeakingTestDto } from './dto/update-speaking-test.dto';
+import { updateOnlySpeakingTestDto } from './dto/update-speaking-test.dto';
 import { HttpError } from 'src/common/exception/http.error';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindAllSpeakingTestDto } from './dto/findAll-speaking.test.dto';
@@ -169,6 +169,28 @@ export class SpeakingTestService {
       throw new HttpError({ message: 'SpeakingTest not found' });
     }
     return speakingTest;
+  }
+
+  async update(id: string, dto: updateOnlySpeakingTestDto) {
+    const speakingTest = await this.prisma.speakingTest.findUnique({
+      where: { id },
+    });
+    if (!speakingTest) {
+      throw new HttpError({ message: 'SpeakingTest not found' });
+    }
+    const ielts = await this.prisma.ielts.findUnique({
+      where: { id: dto.ieltsId },
+    });
+    if (!ielts) {
+      throw new HttpError({ message: 'Ielts not found' });
+    }
+    return this.prisma.speakingTest.update({
+      where: { id },
+      data: {
+        title: dto.title ?? speakingTest.title,
+        ieltsId: dto.ieltsId ?? speakingTest.ieltsId,
+      },
+    });
   }
 
   async remove(id: string) {

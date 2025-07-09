@@ -1,39 +1,84 @@
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
-export class CreateWritingTestDto {
-  @ApiProperty({ example: 'IELTS Writing Practice 1', description: 'Writing test sarlavhasi' })
+
+// ===== SUBPART DTO =====
+export class CreateWritingSubPartDto {
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  order: number;
+
+  @ApiProperty({ example: '1.1' })
+  @IsString()
+  @IsNotEmpty()
+  label: string;
+
+  @ApiProperty({ example: 'Describe a graph showing population growth.' })
+  @IsString()
+  @IsNotEmpty()
+  question: string;
+}
+
+
+
+// ===== SECTION DTO =====
+export class CreateWritingSectionDto {
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  order: number;
+
+  @ApiProperty({ example: 'Task 1' })
   @IsString()
   @IsNotEmpty()
   title: string;
 
-  @ApiProperty({ example: 'Formal letter to landlord', description: '1-topshiriq sarlavhasi' })
+  @ApiPropertyOptional({ example: 'Write a report based on a graph.' })
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiProperty({ type: [CreateWritingSubPartDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateWritingSubPartDto)
+  subParts: CreateWritingSubPartDto[];
+}
+
+
+
+// ===== TEST DTO =====
+export class CreateWritingTestDto {
+  @ApiProperty({ example: 'IELTS Writing Test 1' })
   @IsString()
   @IsNotEmpty()
-  task1Title: string;
+  title: string;
 
-  @ApiProperty({ example: 'Essay about modern education', description: '2-topshiriq sarlavhasi' })
-  @IsString()
-  @IsNotEmpty()
-  task2Title: string;
-
-  @ApiProperty({ example: 'Write a formal letter to your landlord...', description: '1-topshiriq matni' })
-  @IsString()
-  @IsNotEmpty()
-  task1: string;
-
-  @ApiProperty({ example: 'Write an essay discussing...', description: '2-topshiriq matni' })
-  @IsString()
-  @IsNotEmpty()
-  task2: string;
-
-  @ApiPropertyOptional({ example: 'You should spend about 20 minutes on this task.', description: 'Yozish uchun ko‘rsatma' })
+  @ApiPropertyOptional({
+    example: 'You have 60 minutes to complete both tasks.',
+  })
   @IsOptional()
   @IsString()
   instruction?: string;
 
-  @ApiProperty({ example: '6bffade8-73c9-4fc4-b33c-7826c9d3d3c9', description: 'IELTS group ID' })
+  @ApiProperty({ example: 'uuid-of-ielts-id' })
   @IsUUID()
   @IsNotEmpty()
   ieltsId: string;
+
+  @ApiProperty({ type: [CreateWritingSectionDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateWritingSectionDto)
+  sections: CreateWritingSectionDto[];
 }
+
+

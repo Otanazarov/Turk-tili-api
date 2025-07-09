@@ -1,4 +1,14 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateSpeakingTestDto } from './create-speaking-test.dto';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 
-export class UpdateSpeakingTestDto extends PartialType(CreateSpeakingTestDto) {}
+export class updateOnlySpeakingTestDto {
+  @ApiPropertyOptional({ example: 'Updated IELTS Speaking Test 1' })
+  @IsOptional()
+  @IsString()
+  title?: string;
+
+  @ApiPropertyOptional({ example: 'uuid-ielts-id', description: 'IELTS group ID' })
+  @IsOptional()
+  @IsUUID()
+  ieltsId?: string;
+}

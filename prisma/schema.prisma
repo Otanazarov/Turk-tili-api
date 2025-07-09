@@ -208,21 +208,43 @@ model Follows {
 }
 
 model WritingTest {
-  id          String   @id @default(uuid())
-  task1       String
-  task2       String
-  task1Title  String
-  task2Title  String
+  id          String           @id @default(uuid())
+  title       String?
   instruction String?
-  title       String
   type        String
-  ielts       Ielts    @relation(fields: [ieltsId], references: [id])
-  ieltsId     String // <- foreign key
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  ielts       Ielts            @relation(fields: [ieltsId], references: [id])
+  ieltsId     String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 
+  sections    WritingSection[]
   submissions WritingSubmission[]
 }
+
+model WritingSection {
+  id          String           @id @default(uuid())
+  writingTest WritingTest      @relation(fields: [writingTestId], references: [id], onDelete: Cascade)
+  writingTestId String
+  order       Int
+  title       String
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  subParts    WritingSubPart[]
+}
+
+model WritingSubPart {
+  id          String           @id @default(uuid())
+  section     WritingSection   @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId   String
+  order       Int
+  label       String           // "1.1", "2.1", etc.
+  question    String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
 
 model WritingSubmission {
   id            String      @id @default(uuid())

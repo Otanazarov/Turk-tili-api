@@ -1,44 +1,44 @@
-import { IsOptional, IsString, IsUUID } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsOptional, IsString, IsUUID } from "class-validator";
 
-export class UpdateWritingTestDto {
-  @ApiPropertyOptional({ example: 'Updated Title' })
+export class UpdateWritingSubPartDto {
+  @ApiPropertyOptional({ example: '1.1' })
+  @IsOptional()
+  @IsString()
+  label?: string;
+
+  @ApiPropertyOptional({ example: 'New question text' })
+  @IsOptional()
+  @IsString()
+  question?: string;
+} 
+
+export class UpdateWritingSectionDto {
+  @ApiPropertyOptional({ example: 'Task 1 - Updated' })
   @IsOptional()
   @IsString()
   title?: string;
 
-  @ApiPropertyOptional({ example: 'New Task 1 ...' })
+  @ApiPropertyOptional({ example: 'Updated task description.' })
   @IsOptional()
   @IsString()
-  task1?: string;
+  description?: string;
+}
 
-  @ApiPropertyOptional({ example: 'New Task 2 ...' })
+export class UpdateWritingTestDto {
+  @ApiPropertyOptional({ example: 'Updated IELTS Writing Test Title' })
   @IsOptional()
   @IsString()
-  task2?: string;
+  title?: string;
 
-  @ApiPropertyOptional({ example: 'New TaskTitle' })
-  @IsOptional()
-  @IsString()
-  task1Title?: string;
-
-  @ApiPropertyOptional({example:"instruction"})
+  @ApiPropertyOptional({ example: 'Updated instruction for the test.' })
   @IsOptional()
   @IsString()
   instruction?: string;
 
-  @ApiPropertyOptional({ example: 'New TaskTitle' })
-  @IsOptional()
-  @IsString()
-  task2Title?: string;
-
-  @ApiPropertyOptional({ example: 'WRITING' })
-  @IsOptional()
-  @IsString()
-  type?: string;
-
-  @ApiPropertyOptional({ example: '6bffade8-73c9-4fc4-b33c-7826c9d3d3c9' })
+  @ApiPropertyOptional({ example: 'uuid-of-ielts-id' })
   @IsOptional()
   @IsUUID()
   ieltsId?: string;
 }
+
