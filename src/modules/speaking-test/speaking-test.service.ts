@@ -21,6 +21,7 @@ export class SpeakingTestService {
       data: {
         title: dto.title,
         ieltsId: dto.ieltsId,
+        type: 'SPEAKING',
         sections: {
           create: dto.sections.map((section) => ({
             order: section.order,
@@ -80,6 +81,7 @@ export class SpeakingTestService {
       data: {
         title: dto.title,
         ieltsId: dto.ieltsId,
+        type: 'SPEAKING',
       },
     });
 

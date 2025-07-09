@@ -19,19 +19,21 @@ export class IeltsService {
 
   async findAll(dto: FindAllIeltsDto) {
     const { limit = 10, page = 1 } = dto;
-  
+
     const [data, total] = await this.prisma.$transaction([
       this.prisma.ielts.findMany({
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
         include: {
-          tests: true, // istasangiz faqat id/title kiritish mumkin
+          WritingTest: true,
+          SpeakingTest: true,
+          tests: true,
         },
       }),
       this.prisma.ielts.count(),
     ]);
-  
+
     return {
       total,
       page,
@@ -39,7 +41,6 @@ export class IeltsService {
       data,
     };
   }
-  
 
   async findOne(id: string) {
     const ielts = await this.prisma.ielts.findUnique({
