@@ -21,7 +21,7 @@ export class SpeakingQuestionService {
       data: {
         sectionId: createSpeakingQuestionDto.speakingSectionId,
         order: createSpeakingQuestionDto.order,
-        questionText: createSpeakingQuestionDto.question,
+        questionText: createSpeakingQuestionDto.questionText,
       },
     });
 

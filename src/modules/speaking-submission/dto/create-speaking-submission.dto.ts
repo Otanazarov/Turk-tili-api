@@ -23,7 +23,6 @@ export class CreateSpeakingSubmissionDto {
     type: [AnswerSubmissionDto],
     description: 'Array of answers for the speaking test questions.',
   })
-  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => AnswerSubmissionDto)
   answers: AnswerSubmissionDto[];

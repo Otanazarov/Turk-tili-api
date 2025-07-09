@@ -4,10 +4,11 @@ import { SpeakingSubmissionController } from './speaking-submission.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 import { FileModule } from '../file/file.module';
 import { OpenAIService } from '../openAI/openAI.service';
+import { OpenAIModule } from '../openAI/openAI.module';
 
 @Module({
-  imports: [PrismaModule, FileModule],
+  imports: [PrismaModule, FileModule, OpenAIModule],
   controllers: [SpeakingSubmissionController],
-  providers: [SpeakingSubmissionService, OpenAIService],
+  providers: [SpeakingSubmissionService],
 })
 export class SpeakingSubmissionModule {}

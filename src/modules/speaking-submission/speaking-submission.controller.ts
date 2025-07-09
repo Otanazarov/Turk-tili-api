@@ -28,6 +28,14 @@ export class SpeakingSubmissionController {
     private readonly speakingSubmissionService: SpeakingSubmissionService,
   ) {}
 
+  @Post('speech-to-text')
+  @DecoratorWrapper('Speech to text', true, [Role.USER, Role.ADMIN])
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(AnyFilesInterceptor())
+  speechToText(@UploadedFiles() files: Array<Express.Multer.File>) {
+    return this.speakingSubmissionService.speechToText(files);
+  }
+
   @Post()
   @DecoratorWrapper('CreateSpeakingSubmission', true, [Role.USER, Role.ADMIN])
   @ApiConsumes('multipart/form-data')

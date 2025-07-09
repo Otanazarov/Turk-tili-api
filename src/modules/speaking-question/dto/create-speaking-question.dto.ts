@@ -14,5 +14,5 @@ export class CreateSpeakingQuestionDto {
   @ApiProperty({ example: 'What is your name?' })
   @IsString()
   @IsNotEmpty()
-  question: string;
+  questionText: string;
 }

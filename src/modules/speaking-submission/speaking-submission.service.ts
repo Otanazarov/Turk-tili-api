@@ -18,6 +18,10 @@ export class SpeakingSubmissionService {
     private readonly fileService: FileService,
   ) {}
 
+  async speechToText(files: Array<Express.Multer.File>) {
+    return await this.openAIService.speechToText(files[0].buffer);
+  }
+
   async create(
     dto: CreateSpeakingSubmissionDto,
     files: Array<Express.Multer.File>,
