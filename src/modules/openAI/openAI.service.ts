@@ -46,7 +46,7 @@ export class OpenAIService implements OnModuleInit {
 
   async createChatCompletion(messages: ChatCompletionMessageParam[]) {
     const completion = await this.openAI.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4.1-mini',
       messages,
     });
     return completion.choices[0].message.content;
@@ -80,7 +80,7 @@ export class OpenAIService implements OnModuleInit {
     `;
 
     const completion = await this.openAI.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4.1-mini',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
     });
@@ -127,7 +127,7 @@ export class OpenAIService implements OnModuleInit {
     `;
 
     const completion = await this.openAI.chat.completions.create({
-      model: 'gpt-4-turbo',
+      model: 'gpt-4.1-mini',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
     });
