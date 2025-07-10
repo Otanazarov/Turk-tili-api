@@ -47,7 +47,7 @@ export class WritingTestController {
   }
 
   @Delete(':id')
-  @DecoratorWrapper('udpateWritingTest', true, [Role.ADMIN])
+  @DecoratorWrapper('reomveWritingTest', true, [Role.ADMIN])
   remove(@Param('id') id: string) {
     return this.writingTestService.remove(id);
   }
