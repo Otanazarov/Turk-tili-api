@@ -3,12 +3,16 @@ import { CreateSpeakingQuestionDto } from './dto/create-speaking-question.dto';
 import { UpdateSpeakingQuestionDto } from './dto/update-speaking-question.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { FindAllSpeakingQuestionDto } from './dto/findAll-speaking-question.dto';
+import { CreateSubPartSpeakingQuestionDto } from './dto/create-sub-part-question.dto';
+import { HttpError } from 'src/common/exception/http.error';
 
 @Injectable()
 export class SpeakingQuestionService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createSpeakingQuestionDto: CreateSpeakingQuestionDto) {
+  async createSectionQuestion(
+    createSpeakingQuestionDto: CreateSpeakingQuestionDto,
+  ) {
     const section = await this.prisma.speakingSection.findUnique({
       where: { id: createSpeakingQuestionDto.speakingSectionId },
     });
@@ -26,6 +30,27 @@ export class SpeakingQuestionService {
     });
 
     return question;
+  }
+  async createForSubPart(dto: CreateSubPartSpeakingQuestionDto) {
+    const { speakingSubPartId, order, questionText } = dto;
+
+    const subPart = await this.prisma.speakingSubPart.findUnique({
+      where: { id: speakingSubPartId },
+    });
+
+    if (!subPart) {
+      throw new HttpError({ message: 'Speaking SubPart topilmadi' });
+    }
+
+    const newQuestion = await this.prisma.speakingQuestion.create({
+      data: {
+        subPartId: speakingSubPartId,
+        order,
+        questionText: questionText,
+      },
+    });
+
+    return newQuestion;
   }
 
   async findAll(dto: FindAllSpeakingQuestionDto) {
@@ -73,7 +98,7 @@ export class SpeakingQuestionService {
       where: { id },
       data: {
         order: dto.order,
-        questionText: dto.question,
+        questionText: dto.questionText,
       },
     });
 

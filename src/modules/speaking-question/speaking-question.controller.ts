@@ -14,6 +14,7 @@ import { UpdateSpeakingQuestionDto } from './dto/update-speaking-question.dto';
 import { FindAllSpeakingQuestionDto } from './dto/findAll-speaking-question.dto';
 import { DecoratorWrapper } from 'src/common/auth/decorator.auth';
 import { Role } from '@prisma/client';
+import { CreateSubPartSpeakingQuestionDto } from './dto/create-sub-part-question.dto';
 
 @Controller('speaking-question')
 export class SpeakingQuestionController {
@@ -24,7 +25,15 @@ export class SpeakingQuestionController {
   @Post()
   @DecoratorWrapper('createSpeakingQuestion', true, [Role.ADMIN])
   create(@Body() createSpeakingQuestionDto: CreateSpeakingQuestionDto) {
-    return this.speakingQuestionService.create(createSpeakingQuestionDto);
+    return this.speakingQuestionService.createSectionQuestion(
+      createSpeakingQuestionDto,
+    );
+  }
+
+  @Post('/subpart-questions')
+  @DecoratorWrapper('createSubPartQuestion', true, [Role.ADMIN])
+  createSubPartQuestion(@Body() dto: CreateSubPartSpeakingQuestionDto) {
+    return this.speakingQuestionService.createForSubPart(dto);
   }
 
   @Get()
@@ -36,10 +45,10 @@ export class SpeakingQuestionController {
   @Get(':id')
   @DecoratorWrapper('findOneSpeakingQuestion')
   findOne(@Param('id') id: string) {
-    return this.speakingQuestionService.findOne(id);
+    return this.speakingQuestionService.findOne(id);  
   }
 
-  @Patch(':id') 
+  @Patch(':id')
   @DecoratorWrapper('updateSpeakingQuestion', true, [Role.ADMIN])
   update(
     @Param('id') id: string,

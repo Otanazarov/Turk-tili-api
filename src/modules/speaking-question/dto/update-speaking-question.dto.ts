@@ -10,5 +10,5 @@ export class UpdateSpeakingQuestionDto {
   @ApiPropertyOptional({ example: 'What is your name?' })
   @IsOptional()
   @IsString()
-  question?: string;
+  questionText?: string;
 }

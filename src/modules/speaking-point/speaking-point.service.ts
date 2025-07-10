@@ -22,7 +22,7 @@ export class SpeakingPointService {
         sectionId: createSpeakingPointDto.speakingSectionId,
         order: createSpeakingPointDto.order,
         type: createSpeakingPointDto.type,
-        question: createSpeakingPointDto.questionText,
+        questionText: createSpeakingPointDto.questionText,
       },
     });
 
@@ -74,7 +74,7 @@ export class SpeakingPointService {
       data: {
         order: updateDto.order ?? existing.order,
         type: updateDto.type ?? existing.type,
-        question: updateDto.question ?? existing.question,
+        questionText: updateDto.question ?? existing.questionText,
       },
     });
 

@@ -49,7 +49,7 @@ export class CreateSpeakingPointDto {
   @ApiProperty({ example: 'University provides professional skills.' })
   @IsString()
   @IsNotEmpty()
-  question: string;
+  questionText: string;
 }
 
 /* SUBPART DTO - faqat PART1 uchun */
@@ -66,6 +66,12 @@ export class CreateSpeakingSubPartDto {
 
   @ApiProperty({
     type: [CreateSpeakingQuestionDto],
+    example: [
+      {
+        order: 1,
+        question: 'What is your name?',
+      },
+    ],
   })
   @ValidateNested({ each: true })
   @Type(() => CreateSpeakingQuestionDto)
@@ -109,6 +115,16 @@ export class CreateSpeakingSectionDto {
   @ApiPropertyOptional({
     type: [CreateSpeakingSubPartDto],
     description: 'PART1 uchun subPartlar',
+    example: [
+      {
+        label: '1.1',
+        description: 'Describe the picture',
+        questions: [
+          { order: 1, question: 'What is your name?' },
+          { order: 2, question: 'Do you have pets?' },
+        ],
+      },
+    ],
   })
   @IsOptional()
   @ValidateNested({ each: true })
@@ -118,6 +134,12 @@ export class CreateSpeakingSectionDto {
   @ApiPropertyOptional({
     type: [CreateSpeakingQuestionDto],
     description: 'PART2 yoki PART3 uchun savollar',
+    example: [
+      {
+        order: 1,
+        question: 'What do you do?',
+      },
+    ],
   })
   @IsOptional()
   @ValidateNested({ each: true })
@@ -127,6 +149,18 @@ export class CreateSpeakingSectionDto {
   @ApiPropertyOptional({
     type: [CreateSpeakingPointDto],
     description: 'PART3 uchun ijobiy va salbiy fikrlar',
+    example: [
+      {
+        order: 1,
+        type: 'ADVANTAGE',
+        questionText: 'University provides professional skills.',
+      },
+      {
+        order: 2,
+        type: 'DISADVANTAGE',
+        questionText: 'Not everyone can afford university.',
+      },
+    ],
   })
   @IsOptional()
   @ValidateNested({ each: true })
@@ -149,6 +183,26 @@ export class CreateSpeakingTestDto {
   @ApiProperty({
     type: [CreateSpeakingSectionDto],
     description: 'Speaking test qismlari (Part1, Part2, Part3)',
+    example: [
+      {
+        order: 1,
+        type: 'PART1',
+        title: 'Part 1',
+        description: 'Introductory questions',
+        content: 'Let’s talk about your home town.',
+        images: ['https://cdn.com/image.jpg'],
+        subParts: [
+          {
+            label: '1.1',
+            description: 'Describe your room',
+            questions: [
+              { order: 1, question: 'Do you live in a house or an apartment?' },
+              { order: 2, question: 'What do you like about your room?' },
+            ],
+          },
+        ],
+      },
+    ],
   })
   @IsArray()
   @ValidateNested({ each: true })
