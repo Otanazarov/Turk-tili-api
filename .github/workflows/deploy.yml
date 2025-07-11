@@ -3,7 +3,7 @@ name: Deploy Backend
 on:
   push:
     branches:
-      - main # agar branch boshqa bo‘lsa, o‘zgartir
+      - main
 
 jobs:
   deploy:
@@ -23,5 +23,8 @@ jobs:
             export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/home/ubuntu/.nvm/versions/node/v22.17.0/bin/
             cd /home/ubuntu/Turk-tili-api
             git pull origin main
-            /home/ubuntu/.nvm/versions/node/v22.17.0/bin/yarn install
-            /home/ubuntu/.nvm/versions/node/v22.17.0/bin/pm2 restart backend || /home/ubuntu/.nvm/versions/node/v22.17.0/bin/pm2 start dist/main.js --name backend
+            yarn install
+            npx prisma generate
+            npx prisma migrate deploy
+            yarn build
+            pm2 restart backend || pm2 start dist/main.js --name backend
