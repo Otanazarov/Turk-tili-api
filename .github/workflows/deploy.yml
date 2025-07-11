@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            export PATH=$PATH:/usr/local/bin:/usr/bin:/bin
+            export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/home/ubuntu/.nvm/versions/node/v22.17.0/bin/
             cd /home/ubuntu/Turk-tili-api
             git pull origin main
             /home/ubuntu/.nvm/versions/node/v22.17.0/bin/yarn install
