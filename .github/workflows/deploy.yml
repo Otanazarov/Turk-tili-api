@@ -24,5 +24,4 @@ jobs:
             cd /home/ubuntu/Turk-tili-api
             git pull origin main
             /home/ubuntu/.nvm/versions/node/v22.17.0/bin/yarn install
-            /home/ubuntu/.nvm/versions/node/v22.17.0/bin/yarn build
             /home/ubuntu/.nvm/versions/node/v22.17.0/bin/pm2 restart backend || /home/ubuntu/.nvm/versions/node/v22.17.0/bin/pm2 start dist/main.js --name backend
