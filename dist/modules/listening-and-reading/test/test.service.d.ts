@@ -55,8 +55,8 @@ export declare class TestService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        adminId: string | null;
         ieltsId: string | null;
+        adminId: string | null;
     }>;
     createTest(dto: CreateTestDto): Promise<{
         type: import(".prisma/client").$Enums.TestType;
@@ -65,8 +65,8 @@ export declare class TestService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        adminId: string | null;
         ieltsId: string | null;
+        adminId: string | null;
     }>;
     findOneTestWithAddition(id: string): Promise<{
         parts: ({
@@ -117,8 +117,8 @@ export declare class TestService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        adminId: string | null;
         ieltsId: string | null;
+        adminId: string | null;
     }>;
     findOneOnlyTest(id: string): Promise<{
         type: import(".prisma/client").$Enums.TestType;
@@ -127,8 +127,8 @@ export declare class TestService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        adminId: string | null;
         ieltsId: string | null;
+        adminId: string | null;
     }>;
     findAll(dto: FindAllTestDto): Promise<{
         total: number;
@@ -183,8 +183,8 @@ export declare class TestService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            adminId: string | null;
             ieltsId: string | null;
+            adminId: string | null;
         })[];
     }>;
     findAllOnlyTest(dto: FindAllTestDto): Promise<{
@@ -198,8 +198,8 @@ export declare class TestService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            adminId: string | null;
             ieltsId: string | null;
+            adminId: string | null;
         }[];
     }>;
     updateOnlyTest(id: string, dto: UpdateTestDto): Promise<{
@@ -209,8 +209,8 @@ export declare class TestService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        adminId: string | null;
         ieltsId: string | null;
+        adminId: string | null;
     }>;
     removeTest(id: string): Promise<{
         type: import(".prisma/client").$Enums.TestType;
@@ -219,8 +219,8 @@ export declare class TestService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        adminId: string | null;
         ieltsId: string | null;
+        adminId: string | null;
     }>;
     removeOnlyTest(id: string): Promise<{
         type: import(".prisma/client").$Enums.TestType;
@@ -229,7 +229,7 @@ export declare class TestService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        adminId: string | null;
         ieltsId: string | null;
+        adminId: string | null;
     }>;
 }

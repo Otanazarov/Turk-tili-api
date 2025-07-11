@@ -6,58 +6,58 @@ export declare class SectionController {
     private readonly sectionService;
     constructor(sectionService: SectionService);
     create(createSectionDto: CreateSectionDto): Promise<{
-        title: string | null;
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        content: string | null;
         partId: string;
+        title: string | null;
+        content: string | null;
         hasBullets: boolean;
         imageUrl: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findAll(dto: FindAllSectionDto): Promise<{
         total: number;
         page: number;
         limit: number;
         data: {
-            title: string | null;
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            content: string | null;
             partId: string;
+            title: string | null;
+            content: string | null;
             hasBullets: boolean;
             imageUrl: string | null;
+            createdAt: Date;
+            updatedAt: Date;
         }[];
     }>;
     findOne(id: string): import(".prisma/client").Prisma.Prisma__SectionClient<{
-        title: string | null;
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        content: string | null;
         partId: string;
+        title: string | null;
+        content: string | null;
         hasBullets: boolean;
         imageUrl: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, updateSectionDto: UpdateSectionDto): Promise<{
-        title: string | null;
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        content: string | null;
         partId: string;
+        title: string | null;
+        content: string | null;
         hasBullets: boolean;
         imageUrl: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     remove(id: string): Promise<{
-        title: string | null;
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        content: string | null;
         partId: string;
+        title: string | null;
+        content: string | null;
         hasBullets: boolean;
         imageUrl: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
 }

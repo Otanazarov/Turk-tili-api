@@ -17,7 +17,7 @@ import { Role } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('section')
-@ApiTags('Reading Or Listening Section')
+@ApiTags('Reading Or Listening Section for')
 export class SectionController {
   constructor(private readonly sectionService: SectionService) {}
 

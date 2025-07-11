@@ -23,8 +23,8 @@ export declare class IeltsService {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                adminId: string | null;
                 ieltsId: string | null;
+                adminId: string | null;
             }[];
             WritingTest: {
                 type: string;
@@ -58,8 +58,8 @@ export declare class IeltsService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            adminId: string | null;
             ieltsId: string | null;
+            adminId: string | null;
         }[];
     } & {
         title: string;

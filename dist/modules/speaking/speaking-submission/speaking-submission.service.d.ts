@@ -18,29 +18,29 @@ export declare class SpeakingSubmissionService {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                order: number;
-                questionText: string;
                 sectionId: string | null;
                 subPartId: string | null;
+                order: number;
+                questionText: string;
             };
         } & {
+            text: string | null;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            text: string | null;
-            questionId: string;
             audioUrl: string;
+            questionId: string;
             submissionId: string;
         })[];
     } & {
         id: string;
+        userId: string;
+        speakingTestId: string;
+        aiFeedback: import("@prisma/client/runtime/library").JsonValue | null;
+        score: number | null;
+        submittedAt: Date;
         createdAt: Date;
         updatedAt: Date;
-        speakingTestId: string;
-        score: number | null;
-        userId: string;
-        aiFeedback: import("@prisma/client/runtime/library").JsonValue | null;
-        submittedAt: Date;
     }>;
     scoreSubmission(submissionId: string, answers: (SpeakingSubmissionAnswer & {
         question: SpeakingQuestion;
@@ -51,112 +51,112 @@ export declare class SpeakingSubmissionService {
         limit: number;
         data: ({
             user: {
-                name: string | null;
-                password: string | null;
-                refreshToken: string | null;
                 id: string;
-                role: import(".prisma/client").$Enums.Role;
                 createdAt: Date;
                 updatedAt: Date;
+                name: string | null;
                 email: string | null;
+                password: string | null;
                 username: string | null;
                 avatarUrl: string | null;
+                role: import(".prisma/client").$Enums.Role;
                 level: import(".prisma/client").$Enums.IELTSLevel | null;
                 targetScore: number | null;
                 googleId: string | null;
                 provider: string;
+                refreshToken: string | null;
             };
             speakingTest: {
-                type: string;
-                title: string;
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
+                title: string;
                 ieltsId: string;
+                type: string;
             };
         } & {
             id: string;
+            userId: string;
+            speakingTestId: string;
+            aiFeedback: import("@prisma/client/runtime/library").JsonValue | null;
+            score: number | null;
+            submittedAt: Date;
             createdAt: Date;
             updatedAt: Date;
-            speakingTestId: string;
-            score: number | null;
-            userId: string;
-            aiFeedback: import("@prisma/client/runtime/library").JsonValue | null;
-            submittedAt: Date;
         })[];
     }>;
     findOne(id: string): Promise<{
         user: {
-            name: string | null;
-            password: string | null;
-            refreshToken: string | null;
             id: string;
-            role: import(".prisma/client").$Enums.Role;
             createdAt: Date;
             updatedAt: Date;
+            name: string | null;
             email: string | null;
+            password: string | null;
             username: string | null;
             avatarUrl: string | null;
+            role: import(".prisma/client").$Enums.Role;
             level: import(".prisma/client").$Enums.IELTSLevel | null;
             targetScore: number | null;
             googleId: string | null;
             provider: string;
+            refreshToken: string | null;
         };
         speakingTest: {
-            type: string;
-            title: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
+            title: string;
             ieltsId: string;
+            type: string;
         };
         answers: ({
             question: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                order: number;
-                questionText: string;
                 sectionId: string | null;
                 subPartId: string | null;
+                order: number;
+                questionText: string;
             };
         } & {
+            text: string | null;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            text: string | null;
-            questionId: string;
             audioUrl: string;
+            questionId: string;
             submissionId: string;
         })[];
     } & {
         id: string;
+        userId: string;
+        speakingTestId: string;
+        aiFeedback: import("@prisma/client/runtime/library").JsonValue | null;
+        score: number | null;
+        submittedAt: Date;
         createdAt: Date;
         updatedAt: Date;
-        speakingTestId: string;
-        score: number | null;
-        userId: string;
-        aiFeedback: import("@prisma/client/runtime/library").JsonValue | null;
-        submittedAt: Date;
     }>;
     update(id: string, dto: UpdateSpeakingSubmissionDto): Promise<{
         id: string;
+        userId: string;
+        speakingTestId: string;
+        aiFeedback: import("@prisma/client/runtime/library").JsonValue | null;
+        score: number | null;
+        submittedAt: Date;
         createdAt: Date;
         updatedAt: Date;
-        speakingTestId: string;
-        score: number | null;
-        userId: string;
-        aiFeedback: import("@prisma/client/runtime/library").JsonValue | null;
-        submittedAt: Date;
     }>;
     remove(id: string): Promise<{
         id: string;
+        userId: string;
+        speakingTestId: string;
+        aiFeedback: import("@prisma/client/runtime/library").JsonValue | null;
+        score: number | null;
+        submittedAt: Date;
         createdAt: Date;
         updatedAt: Date;
-        speakingTestId: string;
-        score: number | null;
-        userId: string;
-        aiFeedback: import("@prisma/client/runtime/library").JsonValue | null;
-        submittedAt: Date;
     }>;
 }

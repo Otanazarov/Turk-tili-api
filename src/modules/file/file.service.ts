@@ -14,7 +14,6 @@ export class FileService {
     if (!file) {
       throw new HttpError({ message: 'File not provided', statusCode: 400 });
     }
-    
 
     const uploadPath = join(process.cwd(), 'uploads', pathPrefix);
     const fileName = `${randomString(16)}${extname(file.originalname)}`;

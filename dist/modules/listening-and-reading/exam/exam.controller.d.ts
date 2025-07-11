@@ -28,8 +28,8 @@ export declare class ExamController {
             createdAt: Date;
             updatedAt: Date;
             questionId: string;
-            resultId: string | null;
             isCorrect: boolean;
+            resultId: string | null;
         }[];
     } & {
         id: string;
@@ -68,8 +68,8 @@ export declare class ExamController {
             createdAt: Date;
             updatedAt: Date;
             questionId: string;
-            resultId: string | null;
             isCorrect: boolean;
+            resultId: string | null;
         })[];
     } & {
         id: string;
@@ -89,8 +89,8 @@ export declare class ExamController {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            adminId: string | null;
             ieltsId: string | null;
+            adminId: string | null;
         };
     } & {
         id: string;

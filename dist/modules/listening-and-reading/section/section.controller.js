@@ -85,7 +85,7 @@ __decorate([
 ], SectionController.prototype, "remove", null);
 exports.SectionController = SectionController = __decorate([
     (0, common_1.Controller)('section'),
-    (0, swagger_1.ApiTags)('Reading Or Listening Section'),
+    (0, swagger_1.ApiTags)('Reading Or Listening Section for'),
     __metadata("design:paramtypes", [section_service_1.SectionService])
 ], SectionController);
 //# sourceMappingURL=section.controller.js.map

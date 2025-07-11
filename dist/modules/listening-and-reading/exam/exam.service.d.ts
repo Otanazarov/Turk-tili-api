@@ -27,8 +27,8 @@ export declare class ExamService {
             createdAt: Date;
             updatedAt: Date;
             questionId: string;
-            resultId: string | null;
             isCorrect: boolean;
+            resultId: string | null;
         }[];
     } & {
         id: string;
@@ -67,8 +67,8 @@ export declare class ExamService {
             createdAt: Date;
             updatedAt: Date;
             questionId: string;
-            resultId: string | null;
             isCorrect: boolean;
+            resultId: string | null;
         })[];
     } & {
         id: string;
@@ -88,8 +88,8 @@ export declare class ExamService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            adminId: string | null;
             ieltsId: string | null;
+            adminId: string | null;
         };
     } & {
         id: string;
