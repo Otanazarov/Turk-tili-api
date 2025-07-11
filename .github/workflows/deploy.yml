@@ -20,8 +20,9 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
+            export PATH=$PATH:/usr/local/bin:/usr/bin:/bin
             cd /home/ubuntu/Turk-tili-api
             git pull origin main
-            npm install
-            npm build
-            npx pm2 restart backend ||npx pm2 start dist/main.js --name backend
+            /usr/bin/yarn install
+            /usr/bin/yarn build
+            /usr/local/bin/pm2 restart backend || /usr/local/bin/pm2 start dist/main.js --name backend
